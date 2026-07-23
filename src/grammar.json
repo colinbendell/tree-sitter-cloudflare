@@ -98,7 +98,7 @@
                   },
                   {
                     "type": "SYMBOL",
-                    "name": "ip_list"
+                    "name": "list"
                   }
                 ]
               }
@@ -112,8 +112,17 @@
               "type": "FIELD",
               "name": "lhs",
               "content": {
-                "type": "SYMBOL",
-                "name": "stringlike_field"
+                "type": "CHOICE",
+                "members": [
+                  {
+                    "type": "SYMBOL",
+                    "name": "stringlike_field"
+                  },
+                  {
+                    "type": "SYMBOL",
+                    "name": "bytes_field"
+                  }
+                ]
               }
             },
             {
@@ -128,8 +137,17 @@
               "type": "FIELD",
               "name": "rhs",
               "content": {
-                "type": "SYMBOL",
-                "name": "string_set"
+                "type": "CHOICE",
+                "members": [
+                  {
+                    "type": "SYMBOL",
+                    "name": "string_set"
+                  },
+                  {
+                    "type": "SYMBOL",
+                    "name": "list"
+                  }
+                ]
               }
             }
           ]
@@ -157,8 +175,17 @@
               "type": "FIELD",
               "name": "rhs",
               "content": {
-                "type": "SYMBOL",
-                "name": "number_set"
+                "type": "CHOICE",
+                "members": [
+                  {
+                    "type": "SYMBOL",
+                    "name": "number_set"
+                  },
+                  {
+                    "type": "SYMBOL",
+                    "name": "list"
+                  }
+                ]
               }
             }
           ]
@@ -629,8 +656,17 @@
               "type": "FIELD",
               "name": "rhs",
               "content": {
-                "type": "SYMBOL",
-                "name": "string"
+                "type": "CHOICE",
+                "members": [
+                  {
+                    "type": "SYMBOL",
+                    "name": "string"
+                  },
+                  {
+                    "type": "SYMBOL",
+                    "name": "bytes"
+                  }
+                ]
               }
             }
           ]
@@ -802,6 +838,86 @@
               "content": {
                 "type": "SYMBOL",
                 "name": "_ip"
+              }
+            }
+          ]
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "FIELD",
+              "name": "lhs",
+              "content": {
+                "type": "CHOICE",
+                "members": [
+                  {
+                    "type": "SYMBOL",
+                    "name": "ip_field"
+                  },
+                  {
+                    "type": "SYMBOL",
+                    "name": "ip_func"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "FIELD",
+              "name": "operator",
+              "content": {
+                "type": "CHOICE",
+                "members": [
+                  {
+                    "type": "STRING",
+                    "value": "lt"
+                  },
+                  {
+                    "type": "STRING",
+                    "value": "le"
+                  },
+                  {
+                    "type": "STRING",
+                    "value": "gt"
+                  },
+                  {
+                    "type": "STRING",
+                    "value": "ge"
+                  },
+                  {
+                    "type": "STRING",
+                    "value": "<"
+                  },
+                  {
+                    "type": "STRING",
+                    "value": "<="
+                  },
+                  {
+                    "type": "STRING",
+                    "value": ">"
+                  },
+                  {
+                    "type": "STRING",
+                    "value": ">="
+                  }
+                ]
+              }
+            },
+            {
+              "type": "FIELD",
+              "name": "rhs",
+              "content": {
+                "type": "CHOICE",
+                "members": [
+                  {
+                    "type": "SYMBOL",
+                    "name": "ipv4"
+                  },
+                  {
+                    "type": "SYMBOL",
+                    "name": "ipv6"
+                  }
+                ]
               }
             }
           ]
@@ -2774,6 +2890,34 @@
       "type": "PATTERN",
       "value": "\\d+"
     },
+    "bytes": {
+      "type": "TOKEN",
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "PATTERN",
+            "value": "[0-9A-Fa-f]{2}"
+          },
+          {
+            "type": "REPEAT1",
+            "content": {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "PATTERN",
+                  "value": "[.:-]"
+                },
+                {
+                  "type": "PATTERN",
+                  "value": "[0-9A-Fa-f]{2}"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
     "string": {
       "type": "CHOICE",
       "members": [
@@ -2928,7 +3072,7 @@
         }
       ]
     },
-    "ip_list": {
+    "list": {
       "type": "TOKEN",
       "content": {
         "type": "SEQ",
@@ -2938,33 +3082,8 @@
             "value": "$"
           },
           {
-            "type": "CHOICE",
-            "members": [
-              {
-                "type": "PATTERN",
-                "value": "[a-z\\d_]+"
-              },
-              {
-                "type": "STRING",
-                "value": "cf.open_proxies"
-              },
-              {
-                "type": "STRING",
-                "value": "cf.anonymizer"
-              },
-              {
-                "type": "STRING",
-                "value": "cf.vpn"
-              },
-              {
-                "type": "STRING",
-                "value": "cf.malware"
-              },
-              {
-                "type": "STRING",
-                "value": "cf.botnetcc"
-              }
-            ]
+            "type": "PATTERN",
+            "value": "[a-z\\d_]+(\\.[a-z\\d_]+)*"
           }
         ]
       }

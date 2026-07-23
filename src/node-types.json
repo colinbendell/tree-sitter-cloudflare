@@ -605,6 +605,10 @@
         "required": true,
         "types": [
           {
+            "type": "bytes_field",
+            "named": true
+          },
+          {
             "type": "ip_field",
             "named": true
           },
@@ -641,11 +645,11 @@
         "required": true,
         "types": [
           {
-            "type": "ip_list",
+            "type": "ip_set",
             "named": true
           },
           {
-            "type": "ip_set",
+            "type": "list",
             "named": true
           },
           {
@@ -1220,6 +1224,10 @@
         "multiple": false,
         "required": true,
         "types": [
+          {
+            "type": "bytes",
+            "named": true
+          },
           {
             "type": "ip_range",
             "named": true
@@ -1988,6 +1996,10 @@
     "named": false
   },
   {
+    "type": "bytes",
+    "named": true
+  },
+  {
     "type": "cf.api_gateway.auth_id_present",
     "named": false
   },
@@ -2741,10 +2753,6 @@
     "named": false
   },
   {
-    "type": "ip_list",
-    "named": true
-  },
-  {
     "type": "ipv4",
     "named": true
   },
@@ -2775,6 +2783,10 @@
   {
     "type": "len",
     "named": false
+  },
+  {
+    "type": "list",
+    "named": true
   },
   {
     "type": "lookup_json_integer",
