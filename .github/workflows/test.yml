@@ -1,24 +1,46 @@
 name: Run tests
-on: [push]
-env:
-  CLOUDFLARE_API_TOKEN: ${{ secrets.CF_READ_TOKEN }}
+on:
+  push:
+  pull_request:
+
 jobs:
-  validation-tests:
-    runs-on: ubuntu-22.04
+  corpus:
+    name: Grammar corpus tests
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-go@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      # Pinned so the generated parser is byte-reproducible against the
+      # committed src/ (different CLI versions emit slightly different C).
+      - run: npm install -g tree-sitter-cli@0.26.11
+      - name: Verify committed parser matches grammar.js
+        run: |
+          tree-sitter generate
+          git diff --exit-code src/ \
+            || (echo "::error::src/ is stale; run 'tree-sitter generate' and commit." && exit 1)
+      - run: tree-sitter test
+
+  rust:
+    name: Rust bindings
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - run: cargo test
+
+  validation:
+    name: Cloudflare API validation
+    runs-on: ubuntu-latest
+    # The live-API validation needs a token; skip on forks/PRs where the
+    # secret is unavailable.
+    if: ${{ github.event_name == 'push' }}
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: stable
       - run: cd test/validations && go test
-  corpus-tests:
-    runs-on: ubuntu-22.04
-    steps:
-      - uses: actions/checkout@v3
-      - uses: cachix/install-nix-action@v18
-        with:
-          nix_path: nixpkgs=channel:nixos-unstable
-          github_access_token: ${{ secrets.GITHUB_TOKEN }} 
-      - uses: workflow/nix-shell-action@v3
-        with:
-          packages: tree-sitter,nodejs-18_x
-          script: |
-            tree-sitter test
