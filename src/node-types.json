@@ -2096,6 +2096,10 @@
     "named": false
   },
   {
+    "type": "cf.edge.client_tcp",
+    "named": false
+  },
+  {
     "type": "cf.edge.l4.delivery_rate",
     "named": false
   },
@@ -2109,6 +2113,26 @@
   },
   {
     "type": "cf.hostname.metadata",
+    "named": false
+  },
+  {
+    "type": "cf.intel.ip.attacker_countries",
+    "named": false
+  },
+  {
+    "type": "cf.intel.ip.attacker_names",
+    "named": false
+  },
+  {
+    "type": "cf.intel.ip.datasets",
+    "named": false
+  },
+  {
+    "type": "cf.intel.ip.target_countries",
+    "named": false
+  },
+  {
+    "type": "cf.intel.ip.target_industries",
     "named": false
   },
   {

@@ -269,7 +269,13 @@ export default grammar({
 
     group: ($) => seq("(", field("inner", $._expression), ")"),
 
-    number: ($) => /\d+/,
+    // An integer literal: decimal or `0x` hex, with an optional leading `-`
+    // (wirefilter accepts negatives in value position, e.g. `substring(x, -5)`,
+    // `tcp.dstport eq -1`, and `{-20..-10}` ranges). Array/map indices reuse this
+    // rule; a negative index is a semantic error the engine rejects, not a
+    // syntactic one, so it is left to validation.
+    number: ($) =>
+      token(seq(optional("-"), choice(/0[xX][0-9a-fA-F]+/, /\d+/))),
 
     // A byte-sequence literal: hex octet pairs separated by `:`, `-`, or `.`
     // (e.g. `6F:72:67`). A valid RHS for Bytes / String comparisons. Only
@@ -606,6 +612,12 @@ export default grammar({
         // LLM (Firewall for AI)
         "cf.llm.prompt.pii_categories",
         "cf.llm.prompt.unsafe_topic_categories",
+        // Threat Intelligence (Cloudforce One)
+        "cf.intel.ip.datasets",
+        "cf.intel.ip.target_industries",
+        "cf.intel.ip.attacker_names",
+        "cf.intel.ip.attacker_countries",
+        "cf.intel.ip.target_countries",
       ),
 
     array_number_field: ($) =>
@@ -677,6 +689,8 @@ export default grammar({
         "cf.tls_client_auth.cert_presented",
         "cf.tls_client_auth.cert_rfc9440_too_large",
         "cf.tls_client_auth.cert_chain_rfc9440_too_large",
+        // Edge / L4
+        "cf.edge.client_tcp",
       ),
   },
 });
