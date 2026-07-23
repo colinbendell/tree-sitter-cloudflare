@@ -599,6 +599,40 @@
     }
   },
   {
+    "type": "ip_bounds",
+    "named": true,
+    "fields": {
+      "end": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "ipv4",
+            "named": true
+          },
+          {
+            "type": "ipv6",
+            "named": true
+          }
+        ]
+      },
+      "start": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "ipv4",
+            "named": true
+          },
+          {
+            "type": "ipv6",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "ip_field",
     "named": true,
     "fields": {}
@@ -631,6 +665,10 @@
       "multiple": true,
       "required": true,
       "types": [
+        {
+          "type": "ip_bounds",
+          "named": true
+        },
         {
           "type": "ip_range",
           "named": true
@@ -766,6 +804,32 @@
     }
   },
   {
+    "type": "number_bounds",
+    "named": true,
+    "fields": {
+      "end": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "number",
+            "named": true
+          }
+        ]
+      },
+      "start": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "number",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "number_field",
     "named": true,
     "fields": {}
@@ -848,6 +912,10 @@
       "types": [
         {
           "type": "number",
+          "named": true
+        },
+        {
+          "type": "number_bounds",
           "named": true
         }
       ]
@@ -1501,6 +1569,10 @@
   },
   {
     "type": ",",
+    "named": false
+  },
+  {
+    "type": "..",
     "named": false
   },
   {

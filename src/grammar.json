@@ -369,8 +369,17 @@
         {
           "type": "REPEAT1",
           "content": {
-            "type": "SYMBOL",
-            "name": "_ip"
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "_ip"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "ip_bounds"
+              }
+            ]
           }
         },
         {
@@ -425,13 +434,102 @@
         {
           "type": "REPEAT1",
           "content": {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "number"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "number_bounds"
+              }
+            ]
+          }
+        },
+        {
+          "type": "STRING",
+          "value": "}"
+        }
+      ]
+    },
+    "ip_bounds": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "FIELD",
+              "name": "start",
+              "content": {
+                "type": "SYMBOL",
+                "name": "ipv4"
+              }
+            },
+            {
+              "type": "STRING",
+              "value": ".."
+            },
+            {
+              "type": "FIELD",
+              "name": "end",
+              "content": {
+                "type": "SYMBOL",
+                "name": "ipv4"
+              }
+            }
+          ]
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "FIELD",
+              "name": "start",
+              "content": {
+                "type": "SYMBOL",
+                "name": "ipv6"
+              }
+            },
+            {
+              "type": "STRING",
+              "value": ".."
+            },
+            {
+              "type": "FIELD",
+              "name": "end",
+              "content": {
+                "type": "SYMBOL",
+                "name": "ipv6"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "number_bounds": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "FIELD",
+          "name": "start",
+          "content": {
             "type": "SYMBOL",
             "name": "number"
           }
         },
         {
           "type": "STRING",
-          "value": "}"
+          "value": ".."
+        },
+        {
+          "type": "FIELD",
+          "name": "end",
+          "content": {
+            "type": "SYMBOL",
+            "name": "number"
+          }
         }
       ]
     },
