@@ -1097,6 +1097,10 @@
         {
           "type": "number_field",
           "named": true
+        },
+        {
+          "type": "number_func",
+          "named": true
         }
       ]
     }
