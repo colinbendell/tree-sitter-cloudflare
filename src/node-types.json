@@ -236,6 +236,20 @@
     "type": "bool_func",
     "named": true,
     "fields": {
+      "collection": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "array_string_field",
+            "named": true
+          },
+          {
+            "type": "map_string_array_field",
+            "named": true
+          }
+        ]
+      },
       "field": {
         "multiple": false,
         "required": false,
@@ -265,6 +279,22 @@
             "named": false
           },
           {
+            "type": "has_key",
+            "named": false
+          },
+          {
+            "type": "has_value",
+            "named": false
+          },
+          {
+            "type": "is_jwt_present",
+            "named": false
+          },
+          {
+            "type": "is_jwt_valid",
+            "named": false
+          },
+          {
             "type": "is_timed_hmac_valid_v0",
             "named": false
           },
@@ -280,6 +310,16 @@
         "types": [
           {
             "type": "string",
+            "named": true
+          }
+        ]
+      },
+      "map": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "map_string_array_field",
             "named": true
           }
         ]
@@ -318,6 +358,16 @@
           }
         ]
       },
+      "token_configuration_id": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "string",
+            "named": true
+          }
+        ]
+      },
       "ttl": {
         "multiple": false,
         "required": false,
@@ -332,6 +382,10 @@
         "multiple": false,
         "required": false,
         "types": [
+          {
+            "type": "number",
+            "named": true
+          },
           {
             "type": "string",
             "named": true
@@ -551,6 +605,10 @@
             "named": true
           },
           {
+            "type": "ip_func",
+            "named": true
+          },
+          {
             "type": "number_func",
             "named": true
           },
@@ -636,6 +694,68 @@
     "type": "ip_field",
     "named": true,
     "fields": {}
+  },
+  {
+    "type": "ip_func",
+    "named": true,
+    "fields": {
+      "address": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "ip_field",
+            "named": true
+          },
+          {
+            "type": "ip_range",
+            "named": true
+          },
+          {
+            "type": "ipv4",
+            "named": true
+          },
+          {
+            "type": "ipv6",
+            "named": true
+          }
+        ]
+      },
+      "func": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "cidr",
+            "named": false
+          },
+          {
+            "type": "cidr6",
+            "named": false
+          }
+        ]
+      },
+      "ipv4_bits": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "number",
+            "named": true
+          }
+        ]
+      },
+      "ipv6_bits": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "number",
+            "named": true
+          }
+        ]
+      }
+    }
   },
   {
     "type": "ip_range",
@@ -863,6 +983,28 @@
           {
             "type": "len",
             "named": false
+          },
+          {
+            "type": "lookup_json_integer",
+            "named": false
+          }
+        ]
+      },
+      "keys": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": ",",
+            "named": false
+          },
+          {
+            "type": "number",
+            "named": true
+          },
+          {
+            "type": "string",
+            "named": true
           }
         ]
       },
@@ -961,6 +1103,10 @@
         "types": [
           {
             "type": "ip_field",
+            "named": true
+          },
+          {
+            "type": "ip_func",
             "named": true
           },
           {
@@ -1186,6 +1332,10 @@
             "named": false
           },
           {
+            "type": "split",
+            "named": false
+          },
+          {
             "type": "to_string",
             "named": false
           },
@@ -1200,6 +1350,20 @@
           {
             "type": "uuidv4",
             "named": false
+          }
+        ]
+      },
+      "input": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "string",
+            "named": true
+          },
+          {
+            "type": "stringlike_field",
+            "named": true
           }
         ]
       },
@@ -1229,6 +1393,26 @@
             "type": "number",
             "named": true
           },
+          {
+            "type": "string",
+            "named": true
+          }
+        ]
+      },
+      "limit": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "number",
+            "named": true
+          }
+        ]
+      },
+      "options": {
+        "multiple": false,
+        "required": false,
+        "types": [
           {
             "type": "string",
             "named": true
@@ -1281,6 +1465,16 @@
           },
           {
             "type": "string_array",
+            "named": true
+          }
+        ]
+      },
+      "separator": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "string",
             "named": true
           }
         ]
@@ -1352,6 +1546,16 @@
     "type": "string_func",
     "named": true,
     "fields": {
+      "end": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "number",
+            "named": true
+          }
+        ]
+      },
       "field": {
         "multiple": false,
         "required": false,
@@ -1369,11 +1573,25 @@
             "named": true
           },
           {
+            "type": "ip_func",
+            "named": true
+          },
+          {
             "type": "numberlike_field",
             "named": true
           },
           {
             "type": "stringlike_field",
+            "named": true
+          }
+        ]
+      },
+      "flags": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "string",
             "named": true
           }
         ]
@@ -1384,6 +1602,18 @@
         "types": [
           {
             "type": "concat",
+            "named": false
+          },
+          {
+            "type": "decode_base64",
+            "named": false
+          },
+          {
+            "type": "encode_base64",
+            "named": false
+          },
+          {
+            "type": "join",
             "named": false
           },
           {
@@ -1403,6 +1633,18 @@
             "named": false
           },
           {
+            "type": "remove_query_args",
+            "named": false
+          },
+          {
+            "type": "sha256",
+            "named": false
+          },
+          {
+            "type": "substring",
+            "named": false
+          },
+          {
             "type": "to_string",
             "named": false
           },
@@ -1417,6 +1659,28 @@
           {
             "type": "uuidv4",
             "named": false
+          },
+          {
+            "type": "wildcard_replace",
+            "named": false
+          }
+        ]
+      },
+      "input": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "bytes_field",
+            "named": true
+          },
+          {
+            "type": "string",
+            "named": true
+          },
+          {
+            "type": "stringlike_field",
+            "named": true
           }
         ]
       },
@@ -1432,6 +1696,26 @@
             "type": "number",
             "named": true
           },
+          {
+            "type": "string",
+            "named": true
+          }
+        ]
+      },
+      "options": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "string",
+            "named": true
+          }
+        ]
+      },
+      "pattern": {
+        "multiple": false,
+        "required": false,
+        "types": [
           {
             "type": "string",
             "named": true
@@ -1468,12 +1752,46 @@
           }
         ]
       },
+      "separator": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "string",
+            "named": true
+          }
+        ]
+      },
       "source": {
         "multiple": false,
         "required": false,
         "types": [
           {
+            "type": "bytes_field",
+            "named": true
+          },
+          {
             "type": "stringlike_field",
+            "named": true
+          }
+        ]
+      },
+      "start": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "number",
+            "named": true
+          }
+        ]
+      },
+      "values": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "string_array",
             "named": true
           }
         ]
@@ -1732,6 +2050,14 @@
     "named": false
   },
   {
+    "type": "cidr",
+    "named": false
+  },
+  {
+    "type": "cidr6",
+    "named": false
+  },
+  {
     "type": "comment",
     "named": true,
     "extra": true
@@ -1742,6 +2068,14 @@
   },
   {
     "type": "contains",
+    "named": false
+  },
+  {
+    "type": "decode_base64",
+    "named": false
+  },
+  {
+    "type": "encode_base64",
     "named": false
   },
   {
@@ -1762,6 +2096,14 @@
   },
   {
     "type": "gt",
+    "named": false
+  },
+  {
+    "type": "has_key",
+    "named": false
+  },
+  {
+    "type": "has_value",
     "named": false
   },
   {
@@ -2041,7 +2383,19 @@
     "named": true
   },
   {
+    "type": "is_jwt_present",
+    "named": false
+  },
+  {
+    "type": "is_jwt_valid",
+    "named": false
+  },
+  {
     "type": "is_timed_hmac_valid_v0",
+    "named": false
+  },
+  {
+    "type": "join",
     "named": false
   },
   {
@@ -2050,6 +2404,10 @@
   },
   {
     "type": "len",
+    "named": false
+  },
+  {
+    "type": "lookup_json_integer",
     "named": false
   },
   {
@@ -2121,7 +2479,19 @@
     "named": false
   },
   {
+    "type": "remove_query_args",
+    "named": false
+  },
+  {
+    "type": "sha256",
+    "named": false
+  },
+  {
     "type": "sip",
+    "named": false
+  },
+  {
+    "type": "split",
     "named": false
   },
   {
@@ -2139,6 +2509,10 @@
   {
     "type": "string",
     "named": true
+  },
+  {
+    "type": "substring",
+    "named": false
   },
   {
     "type": "tcp",
@@ -2222,6 +2596,10 @@
   },
   {
     "type": "wildcard",
+    "named": false
+  },
+  {
+    "type": "wildcard_replace",
     "named": false
   },
   {
