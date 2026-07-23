@@ -1,6 +1,12 @@
 /// <reference types="tree-sitter-cli/dsl" />
 // @ts-check
 
+// Comprehensive IPv6 matcher supporting `::` compression, the leading/trailing
+// `::` forms, and IPv4-mapped addresses (e.g. `::ffff:192.0.2.1`). Hex groups
+// are case-insensitive.
+const IPV6 =
+  /(?:[0-9A-Fa-f]{1,4}:){7}[0-9A-Fa-f]{1,4}|(?:[0-9A-Fa-f]{1,4}:){1,7}:|(?:[0-9A-Fa-f]{1,4}:){1,6}:[0-9A-Fa-f]{1,4}|(?:[0-9A-Fa-f]{1,4}:){1,5}(?::[0-9A-Fa-f]{1,4}){1,2}|(?:[0-9A-Fa-f]{1,4}:){1,4}(?::[0-9A-Fa-f]{1,4}){1,3}|(?:[0-9A-Fa-f]{1,4}:){1,3}(?::[0-9A-Fa-f]{1,4}){1,4}|(?:[0-9A-Fa-f]{1,4}:){1,2}(?::[0-9A-Fa-f]{1,4}){1,5}|[0-9A-Fa-f]{1,4}:(?::[0-9A-Fa-f]{1,4}){1,6}|:(?:(?::[0-9A-Fa-f]{1,4}){1,7}|:)|(?:[0-9A-Fa-f]{1,4}:){1,4}:(?:(?:25[0-5]|(?:2[0-4]|1?[0-9])?[0-9])\.){3}(?:25[0-5]|(?:2[0-4]|1?[0-9])?[0-9])|::(?:ffff(?::0{1,4})?:)?(?:(?:25[0-5]|(?:2[0-4]|1?[0-9])?[0-9])\.){3}(?:25[0-5]|(?:2[0-4]|1?[0-9])?[0-9])/;
+
 const NUMBER_COMPARISON_OPS = [
   "eq",
   "ne",
@@ -148,13 +154,22 @@ export default grammar({
       ),
 
     number_func: ($) =>
-      choice(lenFunc(choice($.stringlike_field, $.bytes_field))),
+      choice(
+        lenFunc(choice($.stringlike_field, $.bytes_field)),
+        bitSliceFunc(choice($.string, $.stringlike_field), $.number),
+      ),
 
     bool_func: ($) =>
       choice(
         $.array_func,
         endsWithFunc($.stringlike_field, $.string),
         startsWithFunc($.stringlike_field, $.string),
+        isTimedHmacValidV0Func(
+          $.string,
+          $.stringlike_field,
+          $.number,
+          choice($.number, $.numberlike_field),
+        ),
       ),
 
     array_func: ($) => {
@@ -196,35 +211,40 @@ export default grammar({
       );
     },
 
-    //TODO(nfowl): Implement these
-    // bit_slice_func: $ => seq(),
-    // is_timed_hmac_valid_v0: $ => seq(),
-
     group: ($) => seq("(", field("inner", $._expression), ")"),
 
     number: ($) => /\d+/,
 
-    //TODO(nfowl): Get this working with escaped characters and fix hacky mess
-    string: ($) => /"([^"]*)"/,
-
-    // _escape_sequence: $ => token(prec(1, seq(
-    //   '\\',
-    //   /["\\]/,
-    // ))),
+    // A double-quoted string value. Kept as a single leaf token so the parse
+    // tree stays flat, but with correct escape handling: a backslash escapes
+    // the following character, so `\"` and `\\` do not terminate the string,
+    // and byte escapes such as `\xHH` / `\OOO` are accepted. Cloudflare's engine
+    // (wirefilter) accepts ONLY double-quoted and raw strings — single quotes
+    // are not a valid delimiter.
+    // See: https://developers.cloudflare.com/ruleset-engine/rules-language/values/
+    string: ($) => token(seq('"', repeat(choice(/[^"\\]/, /\\./)), '"')),
 
     boolean: ($) => choice("true", "false"),
 
-    _ip: ($) =>
-      choice(
-        $.ipv4,
-        $.ip_range,
-        //TODO(nfowl): Add ipv6
-      ),
+    _ip: ($) => choice($.ipv4, $.ipv6, $.ip_range),
+
     ipv4: ($) =>
       /(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}/,
 
+    // Full RFC 5952 IPv6, including `::` compression and IPv4-mapped forms.
+    // Written bare (no brackets, no quotes), e.g. `2001:db8::1`.
+    ipv6: ($) => token(IPV6),
+
+    // CIDR range for either family: IPv4 /0-32 or IPv6 /0-128.
     ip_range: ($) =>
-      seq(field("ip", $.ipv4), "/", field("mask", /(?:3[0-2]|[0-2]?[0-9])/)),
+      choice(
+        seq(field("ip", $.ipv4), "/", field("mask", /(?:3[0-2]|[12]?[0-9])/)),
+        seq(
+          field("ip", $.ipv6),
+          "/",
+          field("mask", /(?:12[0-8]|1[01][0-9]|[0-9]?[0-9])/),
+        ),
+      ),
 
     ip_list: ($) =>
       token(
@@ -569,6 +589,50 @@ function urlDecodeFunc(rule) {
 
 function uuidv4Func(rule) {
   return seq(field("func", "uuidv4"), "(", field("seed", rule), ")");
+}
+
+// bit_slice(protocol, offset_start, offset_end) -> Number
+// Extracts a slice of bits from a protocol header (Magic Firewall).
+// e.g. bit_slice("udp", 64, 80)
+function bitSliceFunc(protocol, number) {
+  return seq(
+    field("func", "bit_slice"),
+    "(",
+    field("protocol", protocol),
+    ",",
+    field("offset_start", number),
+    ",",
+    field("offset_end", number),
+    ")",
+  );
+}
+
+// is_timed_hmac_valid_v0(key, message_mac, ttl, current_timestamp,
+//                        [separator_length], [flags]) -> Boolean
+// e.g. is_timed_hmac_valid_v0("secret", http.request.uri, 100000,
+//                             http.request.timestamp.sec, 8, "s")
+function isTimedHmacValidV0Func(str, macField, number, timestamp) {
+  return seq(
+    field("func", "is_timed_hmac_valid_v0"),
+    "(",
+    field("key", str),
+    ",",
+    field("message", macField),
+    ",",
+    field("ttl", number),
+    ",",
+    field("timestamp", timestamp),
+    // `flags` is only valid when `separator_length` is present, so the two
+    // optional trailing args nest rather than standing as independent siblings.
+    optional(
+      seq(
+        ",",
+        field("separator_length", number),
+        optional(seq(",", field("flags", str))),
+      ),
+    ),
+    ")",
+  );
 }
 
 function arrayExpander(rule) {

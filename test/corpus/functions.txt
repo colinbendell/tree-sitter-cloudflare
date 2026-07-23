@@ -50,3 +50,57 @@ lower(to_string(cf.edge.server_port)) eq "80"
             (numberlike_field
               (number_field))))))
     (string)))
+
+================================================================================
+bit_slice func
+================================================================================
+
+bit_slice("udp", 64, 80) == 1
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (simple_expression
+    (number_func
+      (string)
+      (number)
+      (number))
+    (number)))
+
+================================================================================
+is_timed_hmac_valid_v0 with optional args
+================================================================================
+
+is_timed_hmac_valid_v0("secret", http.request.uri, 100000, http.request.timestamp.sec, 8, "s")
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (boollike_field
+    (bool_func
+      (string)
+      (stringlike_field
+        (string_field))
+      (number)
+      (numberlike_field
+        (number_field))
+      (number)
+      (string))))
+
+================================================================================
+is_timed_hmac_valid_v0 required args only
+================================================================================
+
+is_timed_hmac_valid_v0("k", http.request.uri, 100000, http.request.timestamp.sec)
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (boollike_field
+    (bool_func
+      (string)
+      (stringlike_field
+        (string_field))
+      (number)
+      (numberlike_field
+        (number_field)))))

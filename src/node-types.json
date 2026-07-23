@@ -246,6 +246,16 @@
           }
         ]
       },
+      "flags": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "string",
+            "named": true
+          }
+        ]
+      },
       "func": {
         "multiple": false,
         "required": false,
@@ -255,8 +265,66 @@
             "named": false
           },
           {
+            "type": "is_timed_hmac_valid_v0",
+            "named": false
+          },
+          {
             "type": "starts_with",
             "named": false
+          }
+        ]
+      },
+      "key": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "string",
+            "named": true
+          }
+        ]
+      },
+      "message": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "stringlike_field",
+            "named": true
+          }
+        ]
+      },
+      "separator_length": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "number",
+            "named": true
+          }
+        ]
+      },
+      "timestamp": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "number",
+            "named": true
+          },
+          {
+            "type": "numberlike_field",
+            "named": true
+          }
+        ]
+      },
+      "ttl": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "number",
+            "named": true
           }
         ]
       },
@@ -546,6 +614,10 @@
           {
             "type": "ipv4",
             "named": true
+          },
+          {
+            "type": "ipv6",
+            "named": true
           }
         ]
       }
@@ -565,6 +637,10 @@
         },
         {
           "type": "ipv4",
+          "named": true
+        },
+        {
+          "type": "ipv6",
           "named": true
         }
       ]
@@ -700,7 +776,7 @@
     "fields": {
       "field": {
         "multiple": false,
-        "required": true,
+        "required": false,
         "types": [
           {
             "type": "bytes_field",
@@ -717,8 +793,46 @@
         "required": true,
         "types": [
           {
+            "type": "bit_slice",
+            "named": false
+          },
+          {
             "type": "len",
             "named": false
+          }
+        ]
+      },
+      "offset_end": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "number",
+            "named": true
+          }
+        ]
+      },
+      "offset_start": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "number",
+            "named": true
+          }
+        ]
+      },
+      "protocol": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "string",
+            "named": true
+          },
+          {
+            "type": "stringlike_field",
+            "named": true
           }
         ]
       }
@@ -879,6 +993,10 @@
           },
           {
             "type": "ipv4",
+            "named": true
+          },
+          {
+            "type": "ipv6",
             "named": true
           },
           {
@@ -1438,6 +1556,10 @@
     "named": false
   },
   {
+    "type": "bit_slice",
+    "named": false
+  },
+  {
     "type": "cf.bot_management.corporate_proxy",
     "named": false
   },
@@ -1841,6 +1963,14 @@
   {
     "type": "ipv4",
     "named": true
+  },
+  {
+    "type": "ipv6",
+    "named": true
+  },
+  {
+    "type": "is_timed_hmac_valid_v0",
+    "named": false
   },
   {
     "type": "le",
