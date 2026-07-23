@@ -326,7 +326,11 @@ export default grammar({
     not_operator: ($) => choice("not", "!"),
 
     number_array: ($) =>
-      choice($.array_number_field, lenFunc($._string_array_expansion)),
+      choice(
+        $.array_number_field,
+        seq($.map_number_array_field, "[", field("key", $.string), "]"),
+        lenFunc($._string_array_expansion),
+      ),
 
     bool_array: ($) =>
       choice(
@@ -374,6 +378,8 @@ export default grammar({
         $.number_field,
         seq($.number_array, "[", field("index", $.number), "]"),
         seq($.number_func, "[", field("index", $.number), "]"),
+        // Map<Integer> keyed access, e.g. custom_topic_categories["Politics"].
+        seq($.map_number_field, "[", field("key", $.string), "]"),
       ),
 
     stringlike_field: ($) =>
@@ -609,6 +615,16 @@ export default grammar({
         "http.request.jwt.claims.iat.sec.values",
         "http.request.jwt.claims.nbf.sec.values",
       ),
+
+    // Map<Array<Integer>> — keyed by token-config id, yields an integer array.
+    map_number_array_field: ($) =>
+      choice(
+        "http.request.jwt.claims.iat.sec",
+        "http.request.jwt.claims.nbf.sec",
+      ),
+
+    // Map<Integer> — keyed by topic name, yields a scalar relevance score.
+    map_number_field: ($) => choice("cf.llm.prompt.custom_topic_categories"),
 
     bool_field: ($) =>
       choice(

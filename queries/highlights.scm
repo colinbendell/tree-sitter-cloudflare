@@ -28,6 +28,8 @@
  (array_string_field)
  (array_number_field)
  (map_string_array_field)
+ (map_number_array_field)
+ (map_number_field)
 ] @type
 
 [

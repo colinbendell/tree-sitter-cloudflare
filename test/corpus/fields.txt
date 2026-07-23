@@ -55,3 +55,35 @@ any(http.request.jwt.claims.aud.values[*] eq "api")
         (string_array
           (array_string_field))
         (string)))))
+
+================================================================================
+Map<Array<Integer>> JWT time-claim keyed access
+================================================================================
+
+http.request.jwt.claims.iat.sec["cfg"][0] gt 100
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (simple_expression
+    (numberlike_field
+      (number_array
+        (map_number_array_field)
+        (string))
+      (number))
+    (number)))
+
+================================================================================
+Map<Integer> LLM topic-score keyed access
+================================================================================
+
+cf.llm.prompt.custom_topic_categories["Politics"] gt 5
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (simple_expression
+    (numberlike_field
+      (map_number_field)
+      (string))
+    (number)))
