@@ -1616,6 +1616,10 @@
     "named": false
   },
   {
+    "type": "cf.response.1xxx_code",
+    "named": false
+  },
+  {
     "type": "cf.response.error_type",
     "named": false
   },
@@ -1798,10 +1802,6 @@
   },
   {
     "type": "http.request.version",
-    "named": false
-  },
-  {
-    "type": "http.response.1xxx_code",
     "named": false
   },
   {
