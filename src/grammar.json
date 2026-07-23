@@ -616,15 +616,45 @@
                   },
                   {
                     "type": "STRING",
-                    "value": "matches"
-                  },
-                  {
-                    "type": "STRING",
                     "value": "strict wildcard"
                   },
                   {
                     "type": "STRING",
                     "value": "wildcard"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "FIELD",
+              "name": "rhs",
+              "content": {
+                "type": "SYMBOL",
+                "name": "string"
+              }
+            }
+          ]
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "FIELD",
+              "name": "lhs",
+              "content": {
+                "type": "SYMBOL",
+                "name": "stringlike_field"
+              }
+            },
+            {
+              "type": "FIELD",
+              "name": "operator",
+              "content": {
+                "type": "CHOICE",
+                "members": [
+                  {
+                    "type": "STRING",
+                    "value": "matches"
                   },
                   {
                     "type": "STRING",
@@ -638,7 +668,7 @@
               "name": "rhs",
               "content": {
                 "type": "SYMBOL",
-                "name": "string"
+                "name": "regex"
               }
             }
           ]
@@ -1048,7 +1078,7 @@
               "name": "regex",
               "content": {
                 "type": "SYMBOL",
-                "name": "string"
+                "name": "regex"
               }
             },
             {
@@ -2462,15 +2492,54 @@
                           },
                           {
                             "type": "STRING",
-                            "value": "matches"
-                          },
-                          {
-                            "type": "STRING",
                             "value": "strict wildcard"
                           },
                           {
                             "type": "STRING",
                             "value": "wildcard"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "type": "FIELD",
+                      "name": "rhs",
+                      "content": {
+                        "type": "SYMBOL",
+                        "name": "string"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "SEQ",
+                  "members": [
+                    {
+                      "type": "FIELD",
+                      "name": "lhs",
+                      "content": {
+                        "type": "SEQ",
+                        "members": [
+                          {
+                            "type": "SYMBOL",
+                            "name": "string_array"
+                          },
+                          {
+                            "type": "STRING",
+                            "value": "[*]"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "type": "FIELD",
+                      "name": "operator",
+                      "content": {
+                        "type": "CHOICE",
+                        "members": [
+                          {
+                            "type": "STRING",
+                            "value": "matches"
                           },
                           {
                             "type": "STRING",
@@ -2484,7 +2553,7 @@
                       "name": "rhs",
                       "content": {
                         "type": "SYMBOL",
-                        "name": "string"
+                        "name": "regex"
                       }
                     }
                   ]
@@ -2709,42 +2778,59 @@
       "type": "CHOICE",
       "members": [
         {
-          "type": "TOKEN",
-          "content": {
-            "type": "SEQ",
-            "members": [
-              {
-                "type": "STRING",
-                "value": "\""
-              },
-              {
-                "type": "REPEAT",
-                "content": {
-                  "type": "CHOICE",
-                  "members": [
-                    {
-                      "type": "PATTERN",
-                      "value": "[^\"\\\\]"
-                    },
-                    {
-                      "type": "PATTERN",
-                      "value": "\\\\[\\s\\S]"
-                    }
-                  ]
-                }
-              },
-              {
-                "type": "STRING",
-                "value": "\""
-              }
-            ]
-          }
+          "type": "SYMBOL",
+          "name": "_quoted_string"
         },
         {
           "type": "SYMBOL",
           "name": "raw_string"
         }
       ]
+    },
+    "regex": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "_quoted_string"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "raw_string"
+        }
+      ]
+    },
+    "_quoted_string": {
+      "type": "TOKEN",
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "STRING",
+            "value": "\""
+          },
+          {
+            "type": "REPEAT",
+            "content": {
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "PATTERN",
+                  "value": "[^\"\\\\]"
+                },
+                {
+                  "type": "PATTERN",
+                  "value": "\\\\[\\s\\S]"
+                }
+              ]
+            }
+          },
+          {
+            "type": "STRING",
+            "value": "\""
+          }
+        ]
+      }
     },
     "boolean": {
       "type": "CHOICE",
@@ -3285,7 +3371,7 @@
               "name": "regex",
               "content": {
                 "type": "SYMBOL",
-                "name": "string"
+                "name": "regex"
               }
             },
             {

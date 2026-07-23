@@ -24,7 +24,7 @@ http.request.uri.path matches r"/api/v\d+/"
   (simple_expression
     (stringlike_field
       (string_field))
-    (string
+    (regex
       (raw_string))))
 
 ================================================================================
@@ -41,3 +41,17 @@ http.host eq r##"a"#b"##
       (string_field))
     (string
       (raw_string))))
+
+================================================================================
+matches captures a regex node
+================================================================================
+
+http.host matches "^(a|b)\.example\.com$"
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (simple_expression
+    (stringlike_field
+      (string_field))
+    (regex)))

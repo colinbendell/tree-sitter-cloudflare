@@ -57,7 +57,6 @@ Magic Firewall families.
 
 ### TODO
 
-- Move `matches` to use regex capture rather than string capture.
 - A few niche field types have no dedicated grammar slot yet: the
   `Map<Array<Integer>>` JWT time claims (`...iat.sec` / `...nbf.sec` at the map
   level) and `cf.llm.prompt.custom_topic_categories` (`Map<Integer>`).
