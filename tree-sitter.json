@@ -1,0 +1,42 @@
+{
+  "$schema": "https://tree-sitter.github.io/tree-sitter/assets/schemas/config.schema.json",
+  "grammars": [
+    {
+      "name": "cloudflare",
+      "camelcase": "Cloudflare",
+      "scope": "source.cloudflare",
+      "file-types": [
+        "cfrule"
+      ],
+      "highlights": [
+        "queries/highlights.scm"
+      ]
+    }
+  ],
+  "metadata": {
+    "version": "0.0.1",
+    "license": "MIT",
+    "description": "Cloudflare rules language grammar for tree-sitter",
+    "authors": [
+      {
+        "name": "nfowl"
+      },
+      {
+        "name": "Colin Bendell",
+        "email": "colin@bendell.ca"
+      }
+    ],
+    "links": {
+      "repository": "https://github.com/colinbendell/tree-sitter-cloudflare"
+    }
+  },
+  "bindings": {
+    "c": true,
+    "go": false,
+    "node": true,
+    "python": false,
+    "rust": true,
+    "swift": false,
+    "zig": false
+  }
+}

@@ -1,2 +1,27 @@
+# direnv / nix
 .direnv
-target
+
+# Rust artifacts
+target/
+
+# Node artifacts
+build/
+prebuilds/
+node_modules/
+
+# Grammar volatiles
+*.wasm
+*.obj
+*.o
+
+# C artifacts
+*.a
+*.so
+*.so.*
+*.dylib
+*.dll
+
+# Archives
+*.tar.gz
+*.tgz
+*.zip

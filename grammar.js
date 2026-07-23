@@ -1,3 +1,6 @@
+/// <reference types="tree-sitter-cli/dsl" />
+// @ts-check
+
 const NUMBER_COMPARISON_OPS = [
   "eq",
   "ne",
@@ -33,7 +36,7 @@ const STRING_COMPARISON_OPS = [
   "~",
 ];
 
-module.exports = grammar({
+export default grammar({
   name: "cloudflare",
 
   extras: ($) => [$.comment, /\s/],
