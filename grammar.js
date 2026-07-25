@@ -59,7 +59,8 @@ export default grammar({
     // boolean, but Transform Rules and Dynamic Redirects use a bare value
     // expression (e.g. `concat("https://", http.host, http.request.uri.path)`,
     // `regex_replace(http.request.uri.path, "^/a", "/b")`) as the rewrite value.
-    _value_expression: ($) => choice($.string_func, $.number_func),
+    _value_expression: ($) =>
+      choice($.string_func, $.number_func, $.string_array),
 
     _expression: ($) =>
       choice(
@@ -381,6 +382,13 @@ export default grammar({
         urlDecodeFunc($._string_array_expansion, $.string),
         uuidv4Func($._string_array_expansion),
         splitFunc(choice($.stringlike_field, $.string), $.string, $.number),
+        // Scalar string funcs also map over an array expansion (`fn(x[*])`),
+        // producing an array that can be iterated again with `[*]`.
+        decodeBase64Func($._string_array_expansion),
+        encodeBase64Func($._string_array_expansion, $.string),
+        sha256Func($._string_array_expansion),
+        substringFunc($._string_array_expansion, $.number),
+        wildcardReplaceFunc($._string_array_expansion, $.string),
       ),
 
     _string_array_expansion: ($) =>
