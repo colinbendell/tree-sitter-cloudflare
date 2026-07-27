@@ -220,3 +220,21 @@ lookup_json_string(http.request.body.raw, "k")[0] eq "y"
         (string))
       (number))
     (string)))
+
+================================================================================
+Scalar func maps over array expansion, then [*]
+================================================================================
+
+any(decode_base64(http.request.headers["client_id"][*])[*] eq "123abc")
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (boollike_field
+    (bool_func
+      (array_func
+        (string_array
+          (string_array
+            (map_string_array_field)
+            (string)))
+        (string)))))

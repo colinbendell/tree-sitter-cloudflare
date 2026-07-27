@@ -1354,6 +1354,10 @@
           "named": true
         },
         {
+          "type": "string_array",
+          "named": true
+        },
+        {
           "type": "string_func",
           "named": true
         }
@@ -1379,6 +1383,16 @@
     "type": "string_array",
     "named": true,
     "fields": {
+      "end": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "number",
+            "named": true
+          }
+        ]
+      },
       "field": {
         "multiple": true,
         "required": false,
@@ -1417,12 +1431,30 @@
           }
         ]
       },
+      "flags": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "string",
+            "named": true
+          }
+        ]
+      },
       "func": {
         "multiple": false,
         "required": false,
         "types": [
           {
             "type": "concat",
+            "named": false
+          },
+          {
+            "type": "decode_base64",
+            "named": false
+          },
+          {
+            "type": "encode_base64",
             "named": false
           },
           {
@@ -1442,7 +1474,15 @@
             "named": false
           },
           {
+            "type": "sha256",
+            "named": false
+          },
+          {
             "type": "split",
+            "named": false
+          },
+          {
+            "type": "substring",
             "named": false
           },
           {
@@ -1460,15 +1500,43 @@
           {
             "type": "uuidv4",
             "named": false
+          },
+          {
+            "type": "wildcard_replace",
+            "named": false
           }
         ]
       },
       "input": {
-        "multiple": false,
+        "multiple": true,
         "required": false,
         "types": [
           {
+            "type": "*",
+            "named": false
+          },
+          {
+            "type": "[",
+            "named": false
+          },
+          {
+            "type": "[*]",
+            "named": false
+          },
+          {
+            "type": "]",
+            "named": false
+          },
+          {
+            "type": "map_string_array_field",
+            "named": true
+          },
+          {
             "type": "string",
+            "named": true
+          },
+          {
+            "type": "string_array",
             "named": true
           },
           {
@@ -1520,6 +1588,16 @@
         ]
       },
       "options": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "string",
+            "named": true
+          }
+        ]
+      },
+      "pattern": {
         "multiple": false,
         "required": false,
         "types": [
@@ -1615,6 +1693,16 @@
           },
           {
             "type": "string_array",
+            "named": true
+          }
+        ]
+      },
+      "start": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "number",
             "named": true
           }
         ]
