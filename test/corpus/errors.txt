@@ -9,8 +9,7 @@ cf.edge.server_port == "test"
 (source_file
   (ERROR
     (numberlike_field
-      (number_field))
-    (string)))
+      (number_field))))
 
 ================================================================================
 not supported comparison type

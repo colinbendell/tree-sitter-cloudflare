@@ -45,15 +45,15 @@ cargo test             # Rust bindings + offline parse checks
 ## Status
 
 Supported: comparison / logical / `in` / wildcard operators, IPv4 & IPv6
-literals, CIDR and `start..end` ranges, string (with escapes) / number / boolean
-values, arrays and maps, and the full documented function set (including
+literals, CIDR and `start..end` ranges, quoted (with escapes) and raw
+(`r"..."`) strings, number / boolean values, arrays and maps, and the full
+documented function set (including
 `bit_slice`, `is_timed_hmac_valid_v0`, `cidr`/`cidr6`, `substring`,
 `wildcard_replace`, `split`, `join`, `sha256`, base64, and the JWT helpers).
 
 ### TODO
 
 - Move `matches` to use regex capture rather than string capture.
-- Raw strings (`r"..."` / `r#"..."#`).
 - Expand the hard-coded field enum toward the full Cloudflare field set.
 
 ## License

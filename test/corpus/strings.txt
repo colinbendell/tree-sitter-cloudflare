@@ -11,3 +11,33 @@ http.host eq "a \"b\" \x41\\ c"
     (stringlike_field
       (string_field))
     (string)))
+
+================================================================================
+Raw string
+================================================================================
+
+http.request.uri.path matches r"/api/v\d+/"
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (simple_expression
+    (stringlike_field
+      (string_field))
+    (string
+      (raw_string))))
+
+================================================================================
+Raw string with embedded quote and hashes
+================================================================================
+
+http.host eq r##"a"#b"##
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (simple_expression
+    (stringlike_field
+      (string_field))
+    (string
+      (raw_string))))

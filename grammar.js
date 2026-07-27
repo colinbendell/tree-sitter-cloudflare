@@ -47,6 +47,8 @@ export default grammar({
 
   extras: ($) => [$.comment, /\s/],
 
+  externals: ($) => [$.raw_string],
+
   rules: {
     source_file: ($) => repeat($._expression),
 
@@ -262,7 +264,13 @@ export default grammar({
     // (wirefilter) accepts ONLY double-quoted and raw strings — single quotes
     // are not a valid delimiter.
     // See: https://developers.cloudflare.com/ruleset-engine/rules-language/values/
-    string: ($) => token(seq('"', repeat(choice(/[^"\\]/, /\\[\s\S]/)), '"')),
+    // A raw string (`r"..."`, `r#"..."#`, …) is an alternative form with no
+    // escape processing, recognized by the external scanner (src/scanner.c).
+    string: ($) =>
+      choice(
+        token(seq('"', repeat(choice(/[^"\\]/, /\\[\s\S]/)), '"')),
+        $.raw_string,
+      ),
 
     boolean: ($) => choice("true", "false"),
 
