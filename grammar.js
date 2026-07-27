@@ -69,9 +69,12 @@ export default grammar({
 
     in_expression: ($) => {
       const in_options = [
-        [choice($.ip_field, $.ip_func), choice($.ip_set, $.ip_list)],
-        [$.stringlike_field, $.string_set],
-        [$._number_lhs, $.number_set],
+        [choice($.ip_field, $.ip_func), choice($.ip_set, $.list)],
+        [
+          choice($.stringlike_field, $.bytes_field),
+          choice($.string_set, $.list),
+        ],
+        [$._number_lhs, choice($.number_set, $.list)],
       ];
 
       return choice(
@@ -129,10 +132,16 @@ export default grammar({
 
     simple_expression: ($) => {
       const comps = [
-        [STRING_COMPARISON_OPS, $.stringlike_field, $.string],
+        [STRING_COMPARISON_OPS, $.stringlike_field, choice($.string, $.bytes)],
         [REGEX_OPS, $.stringlike_field, $.regex],
         [NUMBER_COMPARISON_OPS, $._number_lhs, $.number],
         [["eq", "ne", "==", "!="], choice($.ip_field, $.ip_func), $._ip],
+        // IPs are ordered values in wirefilter: lt/le/gt/ge take a single IP.
+        [
+          ["lt", "le", "gt", "ge", "<", "<=", ">", ">="],
+          choice($.ip_field, $.ip_func),
+          choice($.ipv4, $.ipv6),
+        ],
       ];
 
       return choice(
@@ -262,6 +271,12 @@ export default grammar({
 
     number: ($) => /\d+/,
 
+    // A byte-sequence literal: hex octet pairs separated by `:`, `-`, or `.`
+    // (e.g. `6F:72:67`). A valid RHS for Bytes / String comparisons. Only
+    // recognized in value position, so it does not shadow IPv4/IPv6 literals.
+    bytes: ($) =>
+      token(seq(/[0-9A-Fa-f]{2}/, repeat1(seq(/[.:-]/, /[0-9A-Fa-f]{2}/)))),
+
     // A double-quoted string value. Kept as a single leaf token so the parse
     // tree stays flat, but with correct escape handling: a backslash escapes
     // the following character, so `\"` and `\\` do not terminate the string,
@@ -303,20 +318,10 @@ export default grammar({
         ),
       ),
 
-    ip_list: ($) =>
-      token(
-        seq(
-          "$",
-          choice(
-            /[a-z\d_]+/,
-            "cf.open_proxies",
-            "cf.anonymizer",
-            "cf.vpn",
-            "cf.malware",
-            "cf.botnetcc",
-          ),
-        ),
-      ),
+    // A named list reference. Custom lists (`$my_list`) and Cloudflare managed
+    // lists (`$cf.anonymizer`, `$cf.open_proxies`, …) share the same dotted-name
+    // form. Valid as the `in` RHS for IP, string/bytes, and number fields.
+    list: ($) => token(seq("$", /[a-z\d_]+(\.[a-z\d_]+)*/)),
 
     not_operator: ($) => choice("not", "!"),
 

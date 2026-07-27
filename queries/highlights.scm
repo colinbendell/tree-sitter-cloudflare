@@ -1,6 +1,7 @@
 (string) @string
 (regex) @string.regex
 (number) @number
+(bytes) @constant
 (boolean) @boolean
 (comment) @comment
 (ERROR) @error
@@ -15,7 +16,7 @@
   (ip_range)
   (ipv4)
   (ipv6)
-  (ip_list)
+  (list)
 ] @variable
 
 [

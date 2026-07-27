@@ -1,71 +1,54 @@
 ================================================================================
-boolean
+IP ordering comparison
 ================================================================================
 
-ssl
+ip.src le 1.2.3.4
 
 --------------------------------------------------------------------------------
 
 (source_file
-  (boollike_field
-    (bool_field)))
+  (simple_expression
+    (ip_field)
+    (ipv4)))
 
 ================================================================================
-not boolean
+Named list on a string field
 ================================================================================
 
-not ssl
-
---------------------------------------------------------------------------------
-
-(source_file
-  (not_expression
-    (not_operator)
-    (boollike_field
-      (bool_field))))
-
-================================================================================
-ip list
-================================================================================
-
-ip.src in $my_ips
+http.host in $test
 
 --------------------------------------------------------------------------------
 
 (source_file
   (in_expression
-    (ip_field)
+    (stringlike_field
+      (string_field))
     (list)))
 
 ================================================================================
-managed ip lists
+Named list on a number field
 ================================================================================
 
-ip.src in $cf.botnetcc or ip.src in $cf.open_proxies
+cf.edge.server_port in $ports
 
 --------------------------------------------------------------------------------
 
 (source_file
-  (compound_expression
-    (in_expression
-      (ip_field)
-      (list))
-    (in_expression
-      (ip_field)
-      (list))))
+  (in_expression
+    (numberlike_field
+      (number_field))
+    (list)))
 
 ================================================================================
-corporate proxy
+Byte-sequence literal
 ================================================================================
 
-cf.bot_management.corporate_proxy or ip.src in $cf.open_proxies
+http.host eq 61:62:63
 
 --------------------------------------------------------------------------------
 
 (source_file
-  (compound_expression
-    (boollike_field
-      (bool_field))
-    (in_expression
-      (ip_field)
-      (list))))
+  (simple_expression
+    (stringlike_field
+      (string_field))
+    (bytes)))
