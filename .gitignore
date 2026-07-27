@@ -25,3 +25,6 @@ node_modules/
 *.tar.gz
 *.tgz
 *.zip
+
+# Stray tree-sitter CLI binary (local dev)
+/tree-sitter

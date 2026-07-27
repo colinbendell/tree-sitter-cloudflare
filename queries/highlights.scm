@@ -13,6 +13,7 @@
 [
   (ip_range)
   (ipv4)
+  (ipv6)
   (ip_list)
 ] @variable
 
