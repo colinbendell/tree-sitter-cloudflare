@@ -6,7 +6,7 @@
 pkgs.mkShell {
   buildInputs = [
     pkgs.go
-    pkgs.nodejs-18_x
+    pkgs.nodejs_20
     pkgs.tree-sitter
     pkgs.nodePackages.eslint
     pkgs.nodePackages.prettier

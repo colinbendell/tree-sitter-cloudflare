@@ -104,3 +104,21 @@ is_timed_hmac_valid_v0("k", http.request.uri, 100000, http.request.timestamp.sec
       (number)
       (numberlike_field
         (number_field)))))
+
+================================================================================
+lookup_json_string with multiple keys
+================================================================================
+
+lookup_json_string(http.request.body.raw, "company", "name") eq "x"
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (simple_expression
+    (stringlike_field
+      (string_func
+        (stringlike_field
+          (string_field))
+        (string)
+        (string)))
+    (string)))

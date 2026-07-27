@@ -222,7 +222,7 @@ export default grammar({
     // (wirefilter) accepts ONLY double-quoted and raw strings — single quotes
     // are not a valid delimiter.
     // See: https://developers.cloudflare.com/ruleset-engine/rules-language/values/
-    string: ($) => token(seq('"', repeat(choice(/[^"\\]/, /\\./)), '"')),
+    string: ($) => token(seq('"', repeat(choice(/[^"\\]/, /\\[\s\S]/)), '"')),
 
     boolean: ($) => choice("true", "false"),
 
@@ -251,7 +251,7 @@ export default grammar({
         seq(
           "$",
           choice(
-            /[a-z\d_]*/,
+            /[a-z\d_]+/,
             "cf.open_proxies",
             "cf.anonymizer",
             "cf.vpn",
@@ -352,18 +352,17 @@ export default grammar({
         "http.request.body.size",
         // HTTP response fields
         "http.response.code",
-        "http.response.1xxx_code",
+        "cf.response.1xxx_code",
       ),
 
     ip_field: ($) =>
       choice(
         // Standard fields
         "ip.src",
-        // Dyanmic fields
+        // Dynamic fields
         "cf.edge.server_ip",
         // Magic Firewall fields
         "ip.dst",
-        "ip.src",
       ),
 
     string_field: ($) =>
@@ -401,7 +400,7 @@ export default grammar({
         "raw.http.request.uri",
         "raw.http.request.uri.path",
         "raw.http.request.uri.query",
-        // Dyanmic fields
+        // Dynamic fields
         "cf.bot_management.ja3_hash",
         "cf.verified_bot_category",
         "cf.hostname.metadata",
@@ -412,8 +411,6 @@ export default grammar({
         "icmp",
         "ip",
         "ip.dst.country",
-        "ip.geoip.country",
-        "ip.src.country",
         "tcp",
         "udp",
         // HTTP request body fields
@@ -467,7 +464,7 @@ export default grammar({
         "ip.geoip.is_in_european_union",
         "ip.src.is_in_european_union",
         "ssl",
-        // Dyanmic fields
+        // Dynamic fields
         "cf.bot_management.verified_bot",
         "cf.bot_management.js_detection.passed",
         "cf.bot_management.corporate_proxy",
@@ -501,12 +498,15 @@ export default grammar({
 // - Concat takes minimum 2 args
 // - Concat does not support numbers (TODO: chase this up)
 function concatFunc(rule, args) {
+  // concat takes a minimum of 2 args, comma-separated (trailing comma allowed).
   return seq(
     field("func", "concat"),
     "(",
     rule,
     ",",
-    repeat1(seq(args, optional(","))),
+    args,
+    repeat(seq(",", args)),
+    optional(","),
     ")",
   );
 }
@@ -527,11 +527,14 @@ function lenFunc(rule) {
 }
 
 function lookupFunc(rule, args) {
+  // lookup_json_string(field, key1[, key2, ...]) — the field and each key are
+  // comma-separated (trailing comma allowed).
   return seq(
     field("func", "lookup_json_string"),
     "(",
     field("field", rule),
-    field("keys", repeat1(seq(args, optional(",")))),
+    ",",
+    field("keys", seq(args, repeat(seq(",", args)), optional(","))),
     ")",
   );
 }

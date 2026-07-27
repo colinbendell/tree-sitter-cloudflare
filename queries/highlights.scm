@@ -22,7 +22,9 @@
  (ip_field)
  (string_field)
  (bool_field)
+ (bytes_field)
  (array_string_field)
+ (array_number_field)
  (map_string_array_field)
 ] @type
 
@@ -50,6 +52,8 @@
   "contains"
   "matches"
   "~"
+  "wildcard"
+  "strict wildcard"
   "in"
 ] @operator
 
