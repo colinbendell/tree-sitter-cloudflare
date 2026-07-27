@@ -315,6 +315,10 @@
           {
             "type": "string",
             "named": true
+          },
+          {
+            "type": "stringlike_field",
+            "named": true
           }
         ]
       },
@@ -391,7 +395,15 @@
             "named": true
           },
           {
+            "type": "numberlike_field",
+            "named": true
+          },
+          {
             "type": "string",
+            "named": true
+          },
+          {
+            "type": "stringlike_field",
             "named": true
           }
         ]
@@ -993,6 +1005,14 @@
             "named": true
           },
           {
+            "type": "number_array",
+            "named": true
+          },
+          {
+            "type": "string_array",
+            "named": true
+          },
+          {
             "type": "stringlike_field",
             "named": true
           }
@@ -1326,7 +1346,15 @@
           "named": true
         },
         {
+          "type": "number_func",
+          "named": true
+        },
+        {
           "type": "simple_expression",
+          "named": true
+        },
+        {
+          "type": "string_func",
           "named": true
         }
       ]
@@ -1850,6 +1878,10 @@
         "types": [
           {
             "type": "bytes_field",
+            "named": true
+          },
+          {
+            "type": "string",
             "named": true
           },
           {

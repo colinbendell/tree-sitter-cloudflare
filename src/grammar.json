@@ -5,9 +5,31 @@
     "source_file": {
       "type": "REPEAT",
       "content": {
-        "type": "SYMBOL",
-        "name": "_expression"
+        "type": "CHOICE",
+        "members": [
+          {
+            "type": "SYMBOL",
+            "name": "_expression"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "_value_expression"
+          }
+        ]
       }
+    },
+    "_value_expression": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "string_func"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "number_func"
+        }
+      ]
     },
     "_expression": {
       "type": "CHOICE",
@@ -1181,8 +1203,17 @@
               "type": "FIELD",
               "name": "source",
               "content": {
-                "type": "SYMBOL",
-                "name": "stringlike_field"
+                "type": "CHOICE",
+                "members": [
+                  {
+                    "type": "SYMBOL",
+                    "name": "string"
+                  },
+                  {
+                    "type": "SYMBOL",
+                    "name": "stringlike_field"
+                  }
+                ]
               }
             },
             {
@@ -1842,6 +1873,14 @@
                   {
                     "type": "SYMBOL",
                     "name": "bytes_field"
+                  },
+                  {
+                    "type": "SYMBOL",
+                    "name": "string_array"
+                  },
+                  {
+                    "type": "SYMBOL",
+                    "name": "number_array"
                   }
                 ]
               }
@@ -2252,8 +2291,17 @@
               "type": "FIELD",
               "name": "key",
               "content": {
-                "type": "SYMBOL",
-                "name": "string"
+                "type": "CHOICE",
+                "members": [
+                  {
+                    "type": "SYMBOL",
+                    "name": "string"
+                  },
+                  {
+                    "type": "SYMBOL",
+                    "name": "stringlike_field"
+                  }
+                ]
               }
             },
             {
@@ -2311,6 +2359,14 @@
                   {
                     "type": "SYMBOL",
                     "name": "number"
+                  },
+                  {
+                    "type": "SYMBOL",
+                    "name": "stringlike_field"
+                  },
+                  {
+                    "type": "SYMBOL",
+                    "name": "numberlike_field"
                   }
                 ]
               }

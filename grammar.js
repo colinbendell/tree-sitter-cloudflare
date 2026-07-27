@@ -53,7 +53,13 @@ export default grammar({
   externals: ($) => [$.raw_string],
 
   rules: {
-    source_file: ($) => repeat($._expression),
+    source_file: ($) => repeat(choice($._expression, $._value_expression)),
+
+    // A standalone value-producing expression. Filter/matching expressions are
+    // boolean, but Transform Rules and Dynamic Redirects use a bare value
+    // expression (e.g. `concat("https://", http.host, http.request.uri.path)`,
+    // `regex_replace(http.request.uri.path, "^/a", "/b")`) as the rewrite value.
+    _value_expression: ($) => choice($.string_func, $.number_func),
 
     _expression: ($) =>
       choice(
@@ -170,7 +176,11 @@ export default grammar({
         ),
         lookupFunc($.stringlike_field, choice($.string, $.number)),
         lowerFunc($.stringlike_field),
-        regexReplaceFunc($.stringlike_field, $.regex, $.string),
+        regexReplaceFunc(
+          choice($.string, $.stringlike_field),
+          $.regex,
+          $.string,
+        ),
         removeBytesFunc(choice($.stringlike_field, $.bytes_field), $.string),
         toStringFunc(
           choice($.numberlike_field, $.ip_field, $.ip_func, $.boollike_field),
@@ -195,7 +205,14 @@ export default grammar({
 
     number_func: ($) =>
       choice(
-        lenFunc(choice($.stringlike_field, $.bytes_field)),
+        lenFunc(
+          choice(
+            $.stringlike_field,
+            $.bytes_field,
+            $.string_array,
+            $.number_array,
+          ),
+        ),
         bitSliceFunc(choice($.string, $.stringlike_field), $.number),
         lookupJsonIntegerFunc($.stringlike_field, choice($.string, $.number)),
       ),
@@ -211,10 +228,13 @@ export default grammar({
           $.number,
           choice($.number, $.numberlike_field),
         ),
-        hasKeyFunc($.map_string_array_field, $.string),
+        hasKeyFunc(
+          $.map_string_array_field,
+          choice($.string, $.stringlike_field),
+        ),
         hasValueFunc(
           choice($.map_string_array_field, $.array_string_field),
-          choice($.string, $.number),
+          choice($.string, $.number, $.stringlike_field, $.numberlike_field),
         ),
         isJwtPresentFunc($.string),
         isJwtValidFunc($.string),

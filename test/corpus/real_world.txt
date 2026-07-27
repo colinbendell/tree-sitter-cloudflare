@@ -1,0 +1,1348 @@
+================================================================================
+real 01: http.request.uri.path matches "/autodiscover\.(xml|src)$"
+================================================================================
+
+http.request.uri.path matches "/autodiscover\.(xml|src)$"
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (simple_expression
+    (stringlike_field
+      (string_field))
+    (regex)))
+
+================================================================================
+real 02: http.host eq "www.example.com" and not cf.edge.server_port in
+================================================================================
+
+http.host eq "www.example.com" and not cf.edge.server_port in {80 443}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (compound_expression
+    (simple_expression
+      (stringlike_field
+        (string_field))
+      (string))
+    (not_expression
+      (not_operator)
+      (in_expression
+        (numberlike_field
+          (number_field))
+        (number_set
+          (number)
+          (number))))))
+
+================================================================================
+real 03: (not ip.src.country in {"US" "MX"})
+================================================================================
+
+(not ip.src.country in {"US" "MX"})
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (group
+    (not_expression
+      (not_operator)
+      (in_expression
+        (stringlike_field
+          (string_field))
+        (string_set
+          (string)
+          (string))))))
+
+================================================================================
+real 04: (ip.src.country in {"CN" "TW" "US" "GB"} and cf.waf.score lt 
+================================================================================
+
+(ip.src.country in {"CN" "TW" "US" "GB"} and cf.waf.score lt 20)
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (group
+    (compound_expression
+      (in_expression
+        (stringlike_field
+          (string_field))
+        (string_set
+          (string)
+          (string)
+          (string)
+          (string)))
+      (simple_expression
+        (numberlike_field
+          (number_field))
+        (number)))))
+
+================================================================================
+real 05: not any(lower(http.request.headers.names[*])[*] eq "x-csrf-to
+================================================================================
+
+not any(lower(http.request.headers.names[*])[*] eq "x-csrf-token") and (http.request.full_uri eq "https://www.example.com/somepath")
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (compound_expression
+    (not_expression
+      (not_operator)
+      (boollike_field
+        (bool_func
+          (array_func
+            (string_array
+              (string_array
+                (array_string_field)))
+            (string)))))
+    (group
+      (simple_expression
+        (stringlike_field
+          (string_field))
+        (string)))))
+
+================================================================================
+real 06: (http.cookie contains "devaccess=james" or http.cookie contai
+================================================================================
+
+(http.cookie contains "devaccess=james" or http.cookie contains "devaccess=matt") and http.host eq "dev.www.example.com"
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (compound_expression
+    (group
+      (compound_expression
+        (simple_expression
+          (stringlike_field
+            (string_field))
+          (string))
+        (simple_expression
+          (stringlike_field
+            (string_field))
+          (string))))
+    (simple_expression
+      (stringlike_field
+        (string_field))
+      (string))))
+
+================================================================================
+real 07: (not ip.src in {10.20.30.40 192.168.1.0/24} and http.request.
+================================================================================
+
+(not ip.src in {10.20.30.40 192.168.1.0/24} and http.request.uri.path wildcard "/wp-admin/*")
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (group
+    (compound_expression
+      (not_expression
+        (not_operator)
+        (in_expression
+          (ip_field)
+          (ip_set
+            (ipv4)
+            (ip_range
+              (ipv4)))))
+      (simple_expression
+        (stringlike_field
+          (string_field))
+        (string)))))
+
+================================================================================
+real 08: (http.request.method eq "POST" and http.request.uri.path matc
+================================================================================
+
+(http.request.method eq "POST" and http.request.uri.path matches "(comment|conversation|event|poll)/create" and not http.cookie matches "auth_session=[0-9a-zA-Z]{32}-[0-9]{10}-[0-9a-z]{6}")
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (group
+    (compound_expression
+      (compound_expression
+        (simple_expression
+          (stringlike_field
+            (string_field))
+          (string))
+        (simple_expression
+          (stringlike_field
+            (string_field))
+          (regex)))
+      (not_expression
+        (not_operator)
+        (simple_expression
+          (stringlike_field
+            (string_field))
+          (regex))))))
+
+================================================================================
+real 09: (http.host eq "downloads.example.com" and not is_timed_hmac_v
+================================================================================
+
+(http.host eq "downloads.example.com" and not is_timed_hmac_valid_v0("mysecrettoken", http.request.uri, 10800, http.request.timestamp.sec, 8))
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (group
+    (compound_expression
+      (simple_expression
+        (stringlike_field
+          (string_field))
+        (string))
+      (not_expression
+        (not_operator)
+        (boollike_field
+          (bool_func
+            (string)
+            (stringlike_field
+              (string_field))
+            (number)
+            (numberlike_field
+              (number_field))
+            (number)))))))
+
+================================================================================
+real 10: http.request.uri.path eq "/status" and http.request.method eq
+================================================================================
+
+http.request.uri.path eq "/status" and http.request.method eq "GET" and not ip.src in $partner_ips
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (compound_expression
+    (compound_expression
+      (simple_expression
+        (stringlike_field
+          (string_field))
+        (string))
+      (simple_expression
+        (stringlike_field
+          (string_field))
+        (string)))
+    (not_expression
+      (not_operator)
+      (in_expression
+        (ip_field)
+        (list)))))
+
+================================================================================
+real 11: http.request.uri.path eq "/merchant" and lookup_json_string(h
+================================================================================
+
+http.request.uri.path eq "/merchant" and lookup_json_string(http.request.body.raw, "action") eq "lookup_price"
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (compound_expression
+    (simple_expression
+      (stringlike_field
+        (string_field))
+      (string))
+    (simple_expression
+      (stringlike_field
+        (string_func
+          (stringlike_field
+            (string_field))
+          (string)))
+      (string))))
+
+================================================================================
+real 12: http.request.uri.path eq "/login" and http.request.method eq 
+================================================================================
+
+http.request.uri.path eq "/login" and http.request.method eq "POST" and http.response.code in {401 403}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (compound_expression
+    (compound_expression
+      (simple_expression
+        (stringlike_field
+          (string_field))
+        (string))
+      (simple_expression
+        (stringlike_field
+          (string_field))
+        (string)))
+    (in_expression
+      (numberlike_field
+        (number_field))
+      (number_set
+        (number)
+        (number)))))
+
+================================================================================
+real 13: (http.request.uri.path eq "/store" or http.request.uri.path e
+================================================================================
+
+(http.request.uri.path eq "/store" or http.request.uri.path eq "/prices") and (http.host eq "mystore1.com" or http.host eq "mystore2.com") and not cf.client.bot
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (compound_expression
+    (compound_expression
+      (group
+        (compound_expression
+          (simple_expression
+            (stringlike_field
+              (string_field))
+            (string))
+          (simple_expression
+            (stringlike_field
+              (string_field))
+            (string))))
+      (group
+        (compound_expression
+          (simple_expression
+            (stringlike_field
+              (string_field))
+            (string))
+          (simple_expression
+            (stringlike_field
+              (string_field))
+            (string)))))
+    (not_expression
+      (not_operator)
+      (boollike_field
+        (bool_field)))))
+
+================================================================================
+real 14: (cf.bot_management.score lt 30 and not cf.bot_management.veri
+================================================================================
+
+(cf.bot_management.score lt 30 and not cf.bot_management.verified_bot and not starts_with(http.request.uri.path, "/api"))
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (group
+    (compound_expression
+      (compound_expression
+        (simple_expression
+          (numberlike_field
+            (number_field))
+          (number))
+        (not_expression
+          (not_operator)
+          (boollike_field
+            (bool_field))))
+      (not_expression
+        (not_operator)
+        (boollike_field
+          (bool_func
+            (stringlike_field
+              (string_field))
+            (string)))))))
+
+================================================================================
+real 15: (cf.bot_management.ja3_hash eq "df669e7ea913f1ac0c0cce9a201a2
+================================================================================
+
+(cf.bot_management.ja3_hash eq "df669e7ea913f1ac0c0cce9a201a2ec1")
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (group
+    (simple_expression
+      (stringlike_field
+        (string_field))
+      (string))))
+
+================================================================================
+real 16: (cf.bot_management.score lt 30 and not cf.bot_management.veri
+================================================================================
+
+(cf.bot_management.score lt 30 and not cf.bot_management.verified_bot and ip.src.asnum in {64496 65536})
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (group
+    (compound_expression
+      (compound_expression
+        (simple_expression
+          (numberlike_field
+            (number_field))
+          (number))
+        (not_expression
+          (not_operator)
+          (boollike_field
+            (bool_field))))
+      (in_expression
+        (numberlike_field
+          (number_field))
+        (number_set
+          (number)
+          (number))))))
+
+================================================================================
+real 17: (any(cf.bot_management.detection_ids[*] eq 201326593) and cf.
+================================================================================
+
+(any(cf.bot_management.detection_ids[*] eq 201326593) and cf.waf.credential_check.username_and_password_leaked)
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (group
+    (compound_expression
+      (boollike_field
+        (bool_func
+          (array_func
+            (number_array
+              (array_number_field))
+            (number))))
+      (boollike_field
+        (bool_field)))))
+
+================================================================================
+real 18: (cf.waf.content_scan.has_malicious_obj and http.request.uri.p
+================================================================================
+
+(cf.waf.content_scan.has_malicious_obj and http.request.uri.path eq "/upload.php")
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (group
+    (compound_expression
+      (boollike_field
+        (bool_field))
+      (simple_expression
+        (stringlike_field
+          (string_field))
+        (string)))))
+
+================================================================================
+real 19: any(cf.waf.content_scan.obj_types[*] != "application/pdf") an
+================================================================================
+
+any(cf.waf.content_scan.obj_types[*] != "application/pdf") and http.request.uri.path eq "/upload"
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (compound_expression
+    (boollike_field
+      (bool_func
+        (array_func
+          (string_array
+            (array_string_field))
+          (string))))
+    (simple_expression
+      (stringlike_field
+        (string_field))
+      (string))))
+
+================================================================================
+real 20: any(cf.waf.content_scan.obj_sizes[*] >= 52428800)
+================================================================================
+
+any(cf.waf.content_scan.obj_sizes[*] >= 52428800)
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (boollike_field
+    (bool_func
+      (array_func
+        (number_array
+          (array_number_field))
+        (number)))))
+
+================================================================================
+real 21: (any(cf.llm.prompt.unsafe_topic_categories[*] in {"S1" "S10"}
+================================================================================
+
+(any(cf.llm.prompt.unsafe_topic_categories[*] in {"S1" "S10"}))
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (group
+    (boollike_field
+      (bool_func
+        (array_func
+          (string_array
+            (array_string_field))
+          (string_set
+            (string)
+            (string)))))))
+
+================================================================================
+real 22: (any(cf.llm.prompt.pii_categories[*] in {"CREDIT_CARD" "US_BA
+================================================================================
+
+(any(cf.llm.prompt.pii_categories[*] in {"CREDIT_CARD" "US_BANK_NUMBER" "IBAN_CODE"}) and ip.src.asnum ne 13335)
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (group
+    (compound_expression
+      (boollike_field
+        (bool_func
+          (array_func
+            (string_array
+              (array_string_field))
+            (string_set
+              (string)
+              (string)
+              (string)))))
+      (simple_expression
+        (numberlike_field
+          (number_field))
+        (number)))))
+
+================================================================================
+real 23: (http.request.body.raw matches "EMP-[0-9]{6}")
+================================================================================
+
+(http.request.body.raw matches "EMP-[0-9]{6}")
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (group
+    (simple_expression
+      (stringlike_field
+        (string_field))
+      (regex))))
+
+================================================================================
+real 24: is_jwt_valid("51231d16-01f1-48e3-93f8-91c99e81288e")
+================================================================================
+
+is_jwt_valid("51231d16-01f1-48e3-93f8-91c99e81288e")
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (boollike_field
+    (bool_func
+      (string))))
+
+================================================================================
+real 25: http.request.uri.path ~ "^/images/[^/]+/[^/]+/[^/]+$"
+================================================================================
+
+http.request.uri.path ~ "^/images/[^/]+/[^/]+/[^/]+$"
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (simple_expression
+    (stringlike_field
+      (string_field))
+    (regex)))
+
+================================================================================
+real 26: regex_replace(http.request.uri.path, "^/images/[^/]+/[^/]+/(.
+================================================================================
+
+regex_replace(http.request.uri.path, "^/images/[^/]+/[^/]+/(.+)$", "/img/${1}")
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (string_func
+    (stringlike_field
+      (string_field))
+    (regex)
+    (string)))
+
+================================================================================
+real 27: http.request.uri.path == "/welcome.html" && ip.src.country ==
+================================================================================
+
+http.request.uri.path == "/welcome.html" && ip.src.country == "GB"
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (compound_expression
+    (simple_expression
+      (stringlike_field
+        (string_field))
+      (string))
+    (simple_expression
+      (stringlike_field
+        (string_field))
+      (string))))
+
+================================================================================
+real 28: (lower(raw.http.request.full_uri) wildcard "*%2f*")
+================================================================================
+
+(lower(raw.http.request.full_uri) wildcard "*%2f*")
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (group
+    (simple_expression
+      (stringlike_field
+        (string_func
+          (stringlike_field
+            (string_field))))
+      (string))))
+
+================================================================================
+real 29: ip.src.country == "GB" and http.request.full_uri in $uk_redir
+================================================================================
+
+ip.src.country == "GB" and http.request.full_uri in $uk_redirect_list
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (compound_expression
+    (simple_expression
+      (stringlike_field
+        (string_field))
+      (string))
+    (in_expression
+      (stringlike_field
+        (string_field))
+      (list))))
+
+================================================================================
+real 30: concat("https://example.co.uk/", http.request.uri.path, http.
+================================================================================
+
+concat("https://example.co.uk/", http.request.uri.path, http.request.uri.query)
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (string_func
+    (string)
+    (stringlike_field
+      (string_field))
+    (stringlike_field
+      (string_field))))
+
+================================================================================
+real 31: ip.src == 192.0.2.1 && (tcp.flags.push || tcp.flags.reset)
+================================================================================
+
+ip.src == 192.0.2.1 && (tcp.flags.push || tcp.flags.reset)
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (compound_expression
+    (simple_expression
+      (ip_field)
+      (ipv4))
+    (group
+      (compound_expression
+        (boollike_field
+          (bool_field))
+        (boollike_field
+          (bool_field))))))
+
+================================================================================
+real 32: ip.proto eq "tcp" and ip.dst in $endpoints and tcp.dstport in
+================================================================================
+
+ip.proto eq "tcp" and ip.dst in $endpoints and tcp.dstport in {32768..60999} and not (tcp.flags.syn and not tcp.flags.ack)
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (compound_expression
+    (compound_expression
+      (compound_expression
+        (simple_expression
+          (stringlike_field
+            (string_field))
+          (string))
+        (in_expression
+          (ip_field)
+          (list)))
+      (in_expression
+        (numberlike_field
+          (number_field))
+        (number_set
+          (number_bounds
+            (number)
+            (number)))))
+    (not_expression
+      (not_operator)
+      (group
+        (compound_expression
+          (boollike_field
+            (bool_field))
+          (not_expression
+            (not_operator)
+            (boollike_field
+              (bool_field))))))))
+
+================================================================================
+real 33: ip.proto eq "icmp" and ip.dst in $endpoints and (icmp.type eq
+================================================================================
+
+ip.proto eq "icmp" and ip.dst in $endpoints and (icmp.type eq 0 or icmp.type eq 3 or icmp.type eq 11)
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (compound_expression
+    (compound_expression
+      (simple_expression
+        (stringlike_field
+          (string_field))
+        (string))
+      (in_expression
+        (ip_field)
+        (list)))
+    (group
+      (compound_expression
+        (compound_expression
+          (simple_expression
+            (numberlike_field
+              (number_field))
+            (number))
+          (simple_expression
+            (numberlike_field
+              (number_field))
+            (number)))
+        (simple_expression
+          (numberlike_field
+            (number_field))
+          (number))))))
+
+================================================================================
+real 34: lower(http.host) == "www.cloudflare.com"
+================================================================================
+
+lower(http.host) == "www.cloudflare.com"
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (simple_expression
+    (stringlike_field
+      (string_func
+        (stringlike_field
+          (string_field))))
+    (string)))
+
+================================================================================
+real 35: any(url_decode(http.request.body.form.values[*])[*] contains 
+================================================================================
+
+any(url_decode(http.request.body.form.values[*])[*] contains "an xss attack")
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (boollike_field
+    (bool_func
+      (array_func
+        (string_array
+          (string_array
+            (array_string_field)))
+        (string)))))
+
+================================================================================
+real 36: all(http.request.headers["content-type"][*] == "application/j
+================================================================================
+
+all(http.request.headers["content-type"][*] == "application/json")
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (boollike_field
+    (bool_func
+      (array_func
+        (string_array
+          (map_string_array_field)
+          (string))
+        (string)))))
+
+================================================================================
+real 37: encode_base64(sha256(concat(to_string(ip.src), http.host, "my
+================================================================================
+
+encode_base64(sha256(concat(to_string(ip.src), http.host, "my-secret")))
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (string_func
+    (stringlike_field
+      (string_func
+        (stringlike_field
+          (string_func
+            (stringlike_field
+              (string_func
+                (ip_field)))
+            (stringlike_field
+              (string_field))
+            (string)))))))
+
+================================================================================
+real 38: has_key(http.request.headers, lower(http.request.uri.args.nam
+================================================================================
+
+has_key(http.request.headers, lower(http.request.uri.args.names[0]))
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (boollike_field
+    (bool_func
+      (map_string_array_field)
+      (stringlike_field
+        (string_func
+          (stringlike_field
+            (string_array
+              (array_string_field))
+            (number)))))))
+
+================================================================================
+real 39: has_value(http.request.headers.names, http.request.uri.args.n
+================================================================================
+
+has_value(http.request.headers.names, http.request.uri.args.names[0])
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (boollike_field
+    (bool_func
+      (array_string_field)
+      (stringlike_field
+        (string_array
+          (array_string_field))
+        (number)))))
+
+================================================================================
+real 40: lookup_json_integer(http.request.body.raw, "network_ids", 0)
+================================================================================
+
+lookup_json_integer(http.request.body.raw, "network_ids", 0)
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (number_func
+    (stringlike_field
+      (string_field))
+    (string)
+    (number)))
+
+================================================================================
+real 41: lookup_json_string(http.request.body.raw, "network", "name") 
+================================================================================
+
+lookup_json_string(http.request.body.raw, "network", "name") == "cloudflare"
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (simple_expression
+    (stringlike_field
+      (string_func
+        (stringlike_field
+          (string_field))
+        (string)
+        (string)))
+    (string)))
+
+================================================================================
+real 42: regex_replace("/foo/a/path", "^/foo/([^/]*)/(.*)$", "/bar/${2
+================================================================================
+
+regex_replace("/foo/a/path", "^/foo/([^/]*)/(.*)$", "/bar/${2}/${1}") == "/bar/path/a/"
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (simple_expression
+    (stringlike_field
+      (string_func
+        (string)
+        (regex)
+        (string)))
+    (string)))
+
+================================================================================
+real 43: remove_bytes(http.host, ".w")
+================================================================================
+
+remove_bytes(http.host, ".w")
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (string_func
+    (stringlike_field
+      (string_field))
+    (string)))
+
+================================================================================
+real 44: substring(http.request.body.raw, 0, -2)
+================================================================================
+
+substring(http.request.body.raw, 0, -2)
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (string_func
+    (stringlike_field
+      (string_field))
+    (number)
+    (number)))
+
+================================================================================
+real 45: url_decode(http.request.uri.path) matches "(?u)\p{Hangul}+"
+================================================================================
+
+url_decode(http.request.uri.path) matches "(?u)\p{Hangul}+"
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (simple_expression
+    (stringlike_field
+      (string_func
+        (stringlike_field
+          (string_field))))
+    (regex)))
+
+================================================================================
+real 46: wildcard_replace(http.request.full_uri, "https://*.example.co
+================================================================================
+
+wildcard_replace(http.request.full_uri, "https://*.example.com/*/*", "https://example.com/${1}/${2}/${3}")
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (string_func
+    (stringlike_field
+      (string_field))
+    (string)
+    (string)))
+
+================================================================================
+real 47: wildcard_replace(http.request.uri.path, "/apps/*", "/${1}", "
+================================================================================
+
+wildcard_replace(http.request.uri.path, "/apps/*", "/${1}", "s")
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (string_func
+    (stringlike_field
+      (string_field))
+    (string)
+    (string)
+    (string)))
+
+================================================================================
+real 48: (not cf.bot_management.js_detection.passed and not cf.bot_man
+================================================================================
+
+(not cf.bot_management.js_detection.passed and not cf.bot_management.verified_bot)
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (group
+    (compound_expression
+      (not_expression
+        (not_operator)
+        (boollike_field
+          (bool_field)))
+      (not_expression
+        (not_operator)
+        (boollike_field
+          (bool_field))))))
+
+================================================================================
+real 49: (any(cf.bot_management.detection_ids[*] in {50331648 50331649
+================================================================================
+
+(any(cf.bot_management.detection_ids[*] in {50331648 50331649}) and not cf.bot_management.verified_bot)
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (group
+    (compound_expression
+      (boollike_field
+        (bool_func
+          (array_func
+            (number_array
+              (array_number_field))
+            (number_set
+              (number)
+              (number)))))
+      (not_expression
+        (not_operator)
+        (boollike_field
+          (bool_field))))))
+
+================================================================================
+real 50: (ip.src.asnum in $sus_asns and (cf.bot_management.ja4 in {"" 
+================================================================================
+
+(ip.src.asnum in $sus_asns and (cf.bot_management.ja4 in {"" "t13d1012h1_18ef40b21276_6c9e902ecd13"} or any(cf.bot_management.detection_ids[*] eq 33554817)))
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (group
+    (compound_expression
+      (in_expression
+        (numberlike_field
+          (number_field))
+        (list))
+      (group
+        (compound_expression
+          (in_expression
+            (stringlike_field
+              (string_field))
+            (string_set
+              (string)
+              (string)))
+          (boollike_field
+            (bool_func
+              (array_func
+                (number_array
+                  (array_number_field))
+                (number)))))))))
+
+================================================================================
+real 51: (ip.src in $cf.anonymizer) or (ip.src in $cf.botnetcc) or (ip
+================================================================================
+
+(ip.src in $cf.anonymizer) or (ip.src in $cf.botnetcc) or (ip.src in $cf.malware)
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (compound_expression
+    (compound_expression
+      (group
+        (in_expression
+          (ip_field)
+          (list)))
+      (group
+        (in_expression
+          (ip_field)
+          (list))))
+    (group
+      (in_expression
+        (ip_field)
+        (list)))))
+
+================================================================================
+real 52: http.request.method == "POST" && any(http.request.headers["co
+================================================================================
+
+http.request.method == "POST" && any(http.request.headers["content-type"][*] == "application/x-www-form-urlencoded") && len(http.request.body.form["_username"]) > 0 && len(http.request.body.form["_password"]) > 0
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (compound_expression
+    (compound_expression
+      (compound_expression
+        (simple_expression
+          (stringlike_field
+            (string_field))
+          (string))
+        (boollike_field
+          (bool_func
+            (array_func
+              (string_array
+                (map_string_array_field)
+                (string))
+              (string)))))
+      (simple_expression
+        (number_func
+          (string_array
+            (map_string_array_field)
+            (string)))
+        (number)))
+    (simple_expression
+      (number_func
+        (string_array
+          (map_string_array_field)
+          (string)))
+      (number))))
+
+================================================================================
+real 53: url_decode(http.request.body.form["_username"][0])
+================================================================================
+
+url_decode(http.request.body.form["_username"][0])
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (string_func
+    (stringlike_field
+      (string_array
+        (map_string_array_field)
+        (string))
+      (number))))
+
+================================================================================
+real 54: (http.request.full_uri wildcard r"http://*")
+================================================================================
+
+(http.request.full_uri wildcard r"http://*")
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (group
+    (simple_expression
+      (stringlike_field
+        (string_field))
+      (string
+        (raw_string)))))
+
+================================================================================
+real 55: wildcard_replace(http.request.full_uri, r"http://*", r"https:
+================================================================================
+
+wildcard_replace(http.request.full_uri, r"http://*", r"https://${1}")
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (string_func
+    (stringlike_field
+      (string_field))
+    (string
+      (raw_string))
+    (string
+      (raw_string))))
+
+================================================================================
+real 56: (http.request.uri.path matches "^/[a-z0-9]{32}\.narinfo$")
+================================================================================
+
+(http.request.uri.path matches "^/[a-z0-9]{32}\.narinfo$")
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (group
+    (simple_expression
+      (stringlike_field
+        (string_field))
+      (regex))))
+
+================================================================================
+real 57: (http.request.uri.path contains "../") or (http.request.uri.p
+================================================================================
+
+(http.request.uri.path contains "../") or (http.request.uri.path contains "..%2f") or (http.request.uri.path contains "%2e%2e")
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (compound_expression
+    (compound_expression
+      (group
+        (simple_expression
+          (stringlike_field
+            (string_field))
+          (string)))
+      (group
+        (simple_expression
+          (stringlike_field
+            (string_field))
+          (string))))
+    (group
+      (simple_expression
+        (stringlike_field
+          (string_field))
+        (string)))))
+
+================================================================================
+real 58: not (http.request.method in {"GET" "POST" "PUT" "PATCH" "DELE
+================================================================================
+
+not (http.request.method in {"GET" "POST" "PUT" "PATCH" "DELETE" "HEAD" "OPTIONS"})
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (not_expression
+    (not_operator)
+    (group
+      (in_expression
+        (stringlike_field
+          (string_field))
+        (string_set
+          (string)
+          (string)
+          (string)
+          (string)
+          (string)
+          (string)
+          (string))))))
+
+================================================================================
+real 59: (not ssl) and not starts_with(http.request.uri.path, "/.well-
+================================================================================
+
+(not ssl) and not starts_with(http.request.uri.path, "/.well-known/")
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (compound_expression
+    (group
+      (not_expression
+        (not_operator)
+        (boollike_field
+          (bool_field))))
+    (not_expression
+      (not_operator)
+      (boollike_field
+        (bool_func
+          (stringlike_field
+            (string_field))
+          (string))))))
+
+================================================================================
+real 60: concat("https://", http.host, substring(http.request.uri.path
+================================================================================
+
+concat("https://", http.host, substring(http.request.uri.path, 0, -5))
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (string_func
+    (string)
+    (stringlike_field
+      (string_field))
+    (stringlike_field
+      (string_func
+        (stringlike_field
+          (string_field))
+        (number)
+        (number)))))
+
+================================================================================
+real 61: starts_with(http.host, "data") and (ends_with(http.request.ur
+================================================================================
+
+starts_with(http.host, "data") and (ends_with(http.request.uri.path, "/") or http.request.uri.path == "") and not (ends_with(http.request.uri.path, ".json") or ends_with(http.request.uri.path, ".parquet"))
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (compound_expression
+    (compound_expression
+      (boollike_field
+        (bool_func
+          (stringlike_field
+            (string_field))
+          (string)))
+      (group
+        (compound_expression
+          (boollike_field
+            (bool_func
+              (stringlike_field
+                (string_field))
+              (string)))
+          (simple_expression
+            (stringlike_field
+              (string_field))
+            (string)))))
+    (not_expression
+      (not_operator)
+      (group
+        (compound_expression
+          (boollike_field
+            (bool_func
+              (stringlike_field
+                (string_field))
+              (string)))
+          (boollike_field
+            (bool_func
+              (stringlike_field
+                (string_field))
+              (string))))))))
+
+================================================================================
+real 62: (cf.client.bot and (not http.user_agent contains "UptimeRobot
+================================================================================
+
+(cf.client.bot and (not http.user_agent contains "UptimeRobot")) or (cf.threat_score gt 14)
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (compound_expression
+    (group
+      (compound_expression
+        (boollike_field
+          (bool_field))
+        (group
+          (not_expression
+            (not_operator)
+            (simple_expression
+              (stringlike_field
+                (string_field))
+              (string))))))
+    (group
+      (simple_expression
+        (numberlike_field
+          (number_field))
+        (number)))))
+
+================================================================================
+real 63: (http.host eq "matrix.example.com" and starts_with(http.reque
+================================================================================
+
+(http.host eq "matrix.example.com" and starts_with(http.request.uri.path, "/_matrix/app/") and not ip.src in {203.0.113.4 2001:db8::1})
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (group
+    (compound_expression
+      (compound_expression
+        (simple_expression
+          (stringlike_field
+            (string_field))
+          (string))
+        (boollike_field
+          (bool_func
+            (stringlike_field
+              (string_field))
+            (string))))
+      (not_expression
+        (not_operator)
+        (in_expression
+          (ip_field)
+          (ip_set
+            (ipv4)
+            (ipv6)))))))
+
