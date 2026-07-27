@@ -55,11 +55,8 @@ The field set covers ~200 fields across the HTTP, IP/geo, SSL/TLS, mTLS
 credential-check), LLM (`cf.llm.*`), JWT claims, API Gateway, timings, and
 Magic Firewall families.
 
-### TODO
-
-- A few niche field types have no dedicated grammar slot yet: the
-  `Map<Array<Integer>>` JWT time claims (`...iat.sec` / `...nbf.sec` at the map
-  level) and `cf.llm.prompt.custom_topic_categories` (`Map<Integer>`).
+The full documented field set is covered, including the `Map<Array<Integer>>`
+JWT time claims and the `Map<Integer>` LLM topic scores.
 
 ## License
 

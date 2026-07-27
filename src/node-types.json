@@ -813,6 +813,16 @@
     }
   },
   {
+    "type": "map_number_array_field",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "map_number_field",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "map_string_array_field",
     "named": true,
     "fields": {}
@@ -916,6 +926,10 @@
           {
             "type": "*",
             "named": false
+          },
+          {
+            "type": "string",
+            "named": true
           }
         ]
       }
@@ -926,6 +940,10 @@
       "types": [
         {
           "type": "array_number_field",
+          "named": true
+        },
+        {
+          "type": "map_number_array_field",
           "named": true
         }
       ]
@@ -1084,12 +1102,26 @@
             "named": true
           }
         ]
+      },
+      "key": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "string",
+            "named": true
+          }
+        ]
       }
     },
     "children": {
       "multiple": false,
       "required": true,
       "types": [
+        {
+          "type": "map_number_field",
+          "named": true
+        },
         {
           "type": "number_array",
           "named": true
@@ -2080,6 +2112,10 @@
     "named": false
   },
   {
+    "type": "cf.llm.prompt.custom_topic_categories",
+    "named": false
+  },
+  {
     "type": "cf.llm.prompt.detected",
     "named": false
   },
@@ -2497,6 +2533,10 @@
     "named": false
   },
   {
+    "type": "http.request.jwt.claims.iat.sec",
+    "named": false
+  },
+  {
     "type": "http.request.jwt.claims.iat.sec.names",
     "named": false
   },
@@ -2526,6 +2566,10 @@
   },
   {
     "type": "http.request.jwt.claims.jti.values",
+    "named": false
+  },
+  {
+    "type": "http.request.jwt.claims.nbf.sec",
     "named": false
   },
   {
