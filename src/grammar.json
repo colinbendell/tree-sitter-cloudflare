@@ -2887,8 +2887,37 @@
       ]
     },
     "number": {
-      "type": "PATTERN",
-      "value": "\\d+"
+      "type": "TOKEN",
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "STRING",
+                "value": "-"
+              },
+              {
+                "type": "BLANK"
+              }
+            ]
+          },
+          {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "PATTERN",
+                "value": "0[xX][0-9a-fA-F]+"
+              },
+              {
+                "type": "PATTERN",
+                "value": "\\d+"
+              }
+            ]
+          }
+        ]
+      }
     },
     "bytes": {
       "type": "TOKEN",
@@ -4712,6 +4741,26 @@
         {
           "type": "STRING",
           "value": "cf.llm.prompt.unsafe_topic_categories"
+        },
+        {
+          "type": "STRING",
+          "value": "cf.intel.ip.datasets"
+        },
+        {
+          "type": "STRING",
+          "value": "cf.intel.ip.target_industries"
+        },
+        {
+          "type": "STRING",
+          "value": "cf.intel.ip.attacker_names"
+        },
+        {
+          "type": "STRING",
+          "value": "cf.intel.ip.attacker_countries"
+        },
+        {
+          "type": "STRING",
+          "value": "cf.intel.ip.target_countries"
         }
       ]
     },
@@ -4916,6 +4965,10 @@
         {
           "type": "STRING",
           "value": "cf.tls_client_auth.cert_chain_rfc9440_too_large"
+        },
+        {
+          "type": "STRING",
+          "value": "cf.edge.client_tcp"
         }
       ]
     }
