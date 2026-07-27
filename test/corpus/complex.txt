@@ -33,7 +33,7 @@ Complex expr
                 (simple_expression
                   (stringlike_field
                     (string_field))
-                  (string))
+                  (regex))
                 (simple_expression
                   (stringlike_field
                     (string_field))

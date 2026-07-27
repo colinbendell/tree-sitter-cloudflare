@@ -36,11 +36,14 @@ const STRING_COMPARISON_OPS = [
   ">",
   ">=",
   "contains",
-  "matches",
   "strict wildcard",
   "wildcard",
-  "~",
 ];
+
+// Regex operators. Their right-hand operand is a regular expression, captured
+// as a distinct `regex` node (not a plain `string`) so a regex grammar can be
+// injected via queries/injections.scm.
+const REGEX_OPS = ["matches", "~"];
 
 export default grammar({
   name: "cloudflare",
@@ -127,6 +130,7 @@ export default grammar({
     simple_expression: ($) => {
       const comps = [
         [STRING_COMPARISON_OPS, $.stringlike_field, $.string],
+        [REGEX_OPS, $.stringlike_field, $.regex],
         [NUMBER_COMPARISON_OPS, $._number_lhs, $.number],
         [["eq", "ne", "==", "!="], choice($.ip_field, $.ip_func), $._ip],
       ];
@@ -157,7 +161,7 @@ export default grammar({
         ),
         lookupFunc($.stringlike_field, choice($.string, $.number)),
         lowerFunc($.stringlike_field),
-        regexReplaceFunc($.stringlike_field, $.string),
+        regexReplaceFunc($.stringlike_field, $.regex, $.string),
         removeBytesFunc(choice($.stringlike_field, $.bytes_field), $.string),
         toStringFunc(
           choice($.numberlike_field, $.ip_field, $.ip_func, $.boollike_field),
@@ -232,6 +236,7 @@ export default grammar({
 
       const simple = [
         [STRING_COMPARISON_OPS, arrayExpander($.string_array), $.string],
+        [REGEX_OPS, arrayExpander($.string_array), $.regex],
         [NUMBER_COMPARISON_OPS, arrayExpander($.number_array), $.number],
       ];
 
@@ -266,11 +271,15 @@ export default grammar({
     // See: https://developers.cloudflare.com/ruleset-engine/rules-language/values/
     // A raw string (`r"..."`, `r#"..."#`, …) is an alternative form with no
     // escape processing, recognized by the external scanner (src/scanner.c).
-    string: ($) =>
-      choice(
-        token(seq('"', repeat(choice(/[^"\\]/, /\\[\s\S]/)), '"')),
-        $.raw_string,
-      ),
+    string: ($) => choice($._quoted_string, $.raw_string),
+
+    // A regex value has the same lexical form as a string but is its own node
+    // (used after `matches`/`~` and as the pattern of regex_replace) so editors
+    // can inject a regex grammar into it — see queries/injections.scm.
+    regex: ($) => choice($._quoted_string, $.raw_string),
+
+    _quoted_string: ($) =>
+      token(seq('"', repeat(choice(/[^"\\]/, /\\[\s\S]/)), '"')),
 
     boolean: ($) => choice("true", "false"),
 
@@ -330,7 +339,7 @@ export default grammar({
         ),
         lookupFunc($._string_array_expansion, choice($.string, $.number)),
         lowerFunc($._string_array_expansion),
-        regexReplaceFunc($._string_array_expansion, $.string),
+        regexReplaceFunc($._string_array_expansion, $.regex, $.string),
         removeBytesFunc($._string_array_expansion, $.string),
         toStringFunc(arrayExpander(choice($.number_array, $.bool_array))),
         upperFunc($._string_array_expansion),
@@ -701,15 +710,15 @@ function lowerFunc(rule) {
   return seq(field("func", "lower"), "(", field("field", rule), ")");
 }
 
-function regexReplaceFunc(rule, value) {
+function regexReplaceFunc(rule, regexArg, replacementArg) {
   return seq(
     field("func", "regex_replace"),
     "(",
     field("source", rule),
     ",",
-    field("regex", value),
+    field("regex", regexArg),
     ",",
-    field("replacement", value),
+    field("replacement", replacementArg),
     ")",
   );
 }

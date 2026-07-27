@@ -1,4 +1,5 @@
 (string) @string
+(regex) @string.regex
 (number) @number
 (boolean) @boolean
 (comment) @comment
