@@ -64,7 +64,7 @@ export default grammar({
 
     in_expression: ($) => {
       const in_options = [
-        [$.ip_field, choice($.ip_set, $.ip_list)],
+        [choice($.ip_field, $.ip_func), choice($.ip_set, $.ip_list)],
         [$.stringlike_field, $.string_set],
         [$._number_lhs, $.number_set],
       ];
@@ -126,7 +126,7 @@ export default grammar({
       const comps = [
         [STRING_COMPARISON_OPS, $.stringlike_field, $.string],
         [NUMBER_COMPARISON_OPS, $._number_lhs, $.number],
-        [["eq", "ne", "==", "!="], $.ip_field, $._ip],
+        [["eq", "ne", "==", "!="], choice($.ip_field, $.ip_func), $._ip],
       ];
 
       return choice(
@@ -157,16 +157,32 @@ export default grammar({
         lowerFunc($.stringlike_field),
         regexReplaceFunc($.stringlike_field, $.string),
         removeBytesFunc(choice($.stringlike_field, $.bytes_field), $.string),
-        toStringFunc(choice($.numberlike_field, $.ip_field, $.boollike_field)),
+        toStringFunc(
+          choice($.numberlike_field, $.ip_field, $.ip_func, $.boollike_field),
+        ),
         upperFunc($.stringlike_field),
-        urlDecodeFunc($.stringlike_field),
+        urlDecodeFunc($.stringlike_field, $.string),
         uuidv4Func($.stringlike_field),
+        decodeBase64Func($.stringlike_field),
+        encodeBase64Func(
+          choice($.string, $.stringlike_field, $.bytes_field),
+          $.string,
+        ),
+        joinFunc($.string_array, $.string),
+        removeQueryArgsFunc($.stringlike_field, $.string),
+        sha256Func(choice($.string, $.stringlike_field, $.bytes_field)),
+        substringFunc(choice($.stringlike_field, $.bytes_field), $.number),
+        wildcardReplaceFunc(
+          choice($.stringlike_field, $.bytes_field),
+          $.string,
+        ),
       ),
 
     number_func: ($) =>
       choice(
         lenFunc(choice($.stringlike_field, $.bytes_field)),
         bitSliceFunc(choice($.string, $.stringlike_field), $.number),
+        lookupJsonIntegerFunc($.stringlike_field, choice($.string, $.number)),
       ),
 
     bool_func: ($) =>
@@ -180,6 +196,20 @@ export default grammar({
           $.number,
           choice($.number, $.numberlike_field),
         ),
+        hasKeyFunc($.map_string_array_field, $.string),
+        hasValueFunc(
+          choice($.map_string_array_field, $.array_string_field),
+          choice($.string, $.number),
+        ),
+        isJwtPresentFunc($.string),
+        isJwtValidFunc($.string),
+      ),
+
+    // IP-returning functions (cidr / cidr6).
+    ip_func: ($) =>
+      choice(
+        cidrFunc(choice($.ip_field, $._ip), $.number),
+        cidr6Func(choice($.ip_field, $._ip), $.number),
       ),
 
     array_func: ($) => {
@@ -296,8 +326,9 @@ export default grammar({
         removeBytesFunc($._string_array_expansion, $.string),
         toStringFunc(arrayExpander(choice($.number_array, $.bool_array))),
         upperFunc($._string_array_expansion),
-        urlDecodeFunc($._string_array_expansion),
+        urlDecodeFunc($._string_array_expansion, $.string),
         uuidv4Func($._string_array_expansion),
+        splitFunc(choice($.stringlike_field, $.string), $.string, $.number),
       ),
 
     _string_array_expansion: ($) =>
@@ -596,12 +627,181 @@ function upperFunc(rule) {
   return seq(field("func", "upper"), "(", field("field", rule), ")");
 }
 
-function urlDecodeFunc(rule) {
-  return seq(field("func", "url_decode"), "(", field("field", rule), ")");
+function urlDecodeFunc(rule, options) {
+  return seq(
+    field("func", "url_decode"),
+    "(",
+    field("field", rule),
+    optional(seq(",", field("options", options))),
+    ")",
+  );
 }
 
 function uuidv4Func(rule) {
   return seq(field("func", "uuidv4"), "(", field("seed", rule), ")");
+}
+
+// --- Functions added to match the current Cloudflare functions reference ---
+
+function decodeBase64Func(rule) {
+  return seq(field("func", "decode_base64"), "(", field("source", rule), ")");
+}
+
+function encodeBase64Func(rule, flags) {
+  return seq(
+    field("func", "encode_base64"),
+    "(",
+    field("input", rule),
+    optional(seq(",", field("flags", flags))),
+    ")",
+  );
+}
+
+// join(values, separator) -> String
+function joinFunc(arrayRule, separator) {
+  return seq(
+    field("func", "join"),
+    "(",
+    field("values", arrayRule),
+    ",",
+    field("separator", separator),
+    ")",
+  );
+}
+
+// remove_query_args(field, arg1[, arg2, ...]) -> String
+function removeQueryArgsFunc(rule, arg) {
+  return seq(
+    field("func", "remove_query_args"),
+    "(",
+    field("field", rule),
+    repeat1(seq(",", arg)),
+    ")",
+  );
+}
+
+function sha256Func(rule) {
+  return seq(field("func", "sha256"), "(", field("input", rule), ")");
+}
+
+// substring(field, start[, end]) -> String
+function substringFunc(rule, number) {
+  return seq(
+    field("func", "substring"),
+    "(",
+    field("field", rule),
+    ",",
+    field("start", number),
+    optional(seq(",", field("end", number))),
+    ")",
+  );
+}
+
+// wildcard_replace(source, pattern, replacement[, flags]) -> String
+function wildcardReplaceFunc(rule, value) {
+  return seq(
+    field("func", "wildcard_replace"),
+    "(",
+    field("source", rule),
+    ",",
+    field("pattern", value),
+    ",",
+    field("replacement", value),
+    optional(seq(",", field("flags", value))),
+    ")",
+  );
+}
+
+// lookup_json_integer(field, key1[, key2, ...]) -> Integer
+function lookupJsonIntegerFunc(rule, args) {
+  return seq(
+    field("func", "lookup_json_integer"),
+    "(",
+    field("field", rule),
+    ",",
+    field("keys", seq(args, repeat(seq(",", args)), optional(","))),
+    ")",
+  );
+}
+
+function hasKeyFunc(mapRule, key) {
+  return seq(
+    field("func", "has_key"),
+    "(",
+    field("map", mapRule),
+    ",",
+    field("key", key),
+    ")",
+  );
+}
+
+function hasValueFunc(collectionRule, value) {
+  return seq(
+    field("func", "has_value"),
+    "(",
+    field("collection", collectionRule),
+    ",",
+    field("value", value),
+    ")",
+  );
+}
+
+function isJwtPresentFunc(rule) {
+  return seq(
+    field("func", "is_jwt_present"),
+    "(",
+    field("token_configuration_id", rule),
+    ")",
+  );
+}
+
+function isJwtValidFunc(rule) {
+  return seq(
+    field("func", "is_jwt_valid"),
+    "(",
+    field("token_configuration_id", rule),
+    ")",
+  );
+}
+
+// cidr(address, ipv4_bits, ipv6_bits) -> IP
+function cidrFunc(address, number) {
+  return seq(
+    field("func", "cidr"),
+    "(",
+    field("address", address),
+    ",",
+    field("ipv4_bits", number),
+    ",",
+    field("ipv6_bits", number),
+    ")",
+  );
+}
+
+// cidr6(address, ipv6_bits) -> IP
+function cidr6Func(address, number) {
+  return seq(
+    field("func", "cidr6"),
+    "(",
+    field("address", address),
+    ",",
+    field("ipv6_bits", number),
+    ")",
+  );
+}
+
+// split(input, separator, limit) -> Array<String>
+function splitFunc(rule, separator, number) {
+  return seq(
+    field("func", "split"),
+    "(",
+    field("input", rule),
+    ",",
+    field("separator", separator),
+    ",",
+    field("limit", number),
+    ")",
+  );
 }
 
 // bit_slice(protocol, offset_start, offset_end) -> Number
