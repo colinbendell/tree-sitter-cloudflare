@@ -202,3 +202,21 @@ is_jwt_valid("51231d16-01f1-48e3-93f8-91c99e81288e")
   (boollike_field
     (bool_func
       (string))))
+
+================================================================================
+Indexing a function-call result
+================================================================================
+
+lookup_json_string(http.request.body.raw, "k")[0] eq "y"
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (simple_expression
+    (stringlike_field
+      (string_func
+        (stringlike_field
+          (string_field))
+        (string))
+      (number))
+    (string)))

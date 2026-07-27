@@ -366,12 +366,14 @@ export default grammar({
         $.bool_field,
         seq($.bool_array, "[", field("index", $.number), "]"),
         $.bool_func,
+        seq($.bool_func, "[", field("index", $.number), "]"),
       ),
 
     numberlike_field: ($) =>
       choice(
         $.number_field,
         seq($.number_array, "[", field("index", $.number), "]"),
+        seq($.number_func, "[", field("index", $.number), "]"),
       ),
 
     stringlike_field: ($) =>
@@ -379,6 +381,7 @@ export default grammar({
         $.string_field,
         seq($.string_array, "[", field("index", $.number), "]"),
         $.string_func,
+        seq($.string_func, "[", field("index", $.number), "]"),
       ),
 
     // Cloudflare Ruleset Fields
