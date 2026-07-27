@@ -104,13 +104,23 @@ export default grammar({
       );
     },
 
-    ip_set: ($) => seq("{", repeat1($._ip), "}"),
+    ip_set: ($) => seq("{", repeat1(choice($._ip, $.ip_bounds)), "}"),
 
     string_set: ($) => seq("{", repeat1($.string), "}"),
 
     comment: ($) => token(seq("#", /.*/)),
 
-    number_set: ($) => seq("{", repeat1($.number), "}"),
+    number_set: ($) => seq("{", repeat1(choice($.number, $.number_bounds)), "}"),
+
+    // Inclusive `start..end` range. Valid only inside a `{ }` set.
+    ip_bounds: ($) =>
+      choice(
+        seq(field("start", $.ipv4), "..", field("end", $.ipv4)),
+        seq(field("start", $.ipv6), "..", field("end", $.ipv6)),
+      ),
+
+    number_bounds: ($) =>
+      seq(field("start", $.number), "..", field("end", $.number)),
 
     simple_expression: ($) => {
       const comps = [
