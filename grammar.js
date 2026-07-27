@@ -402,6 +402,20 @@ export default grammar({
         // HTTP response fields
         "http.response.code",
         "cf.response.1xxx_code",
+        // TLS
+        "cf.tls_client_hello_length",
+        // LLM (Firewall for AI)
+        "cf.llm.prompt.injection_score",
+        "cf.llm.prompt.token_count",
+        // Edge / timings
+        "cf.edge.l4.delivery_rate",
+        "cf.timings.edge_msec",
+        "cf.timings.origin_ttfb_msec",
+        "cf.timings.worker_msec",
+        "cf.timings.client_tcp_rtt_msec",
+        "cf.timings.client_quic_rtt_msec",
+        // Magic Firewall
+        "ip.dst.asnum",
       ),
 
     ip_field: ($) =>
@@ -467,6 +481,39 @@ export default grammar({
         "http.request.body.mime",
         // HTTP response fields
         "cf.response.error_type",
+        "http.response.content_type.media_type",
+        "raw.http.request.uri.path.extension",
+        // TLS
+        "cf.tls_version",
+        "cf.tls_cipher",
+        "cf.tls_client_random",
+        "cf.tls_ciphers_sha1",
+        "cf.tls_client_extensions_sha1",
+        "cf.tls_client_extensions_sha1_le",
+        "cf.bot_management.ja4",
+        // mTLS client certificate
+        "cf.tls_client_auth.cert_serial",
+        "cf.tls_client_auth.cert_issuer_serial",
+        "cf.tls_client_auth.cert_ski",
+        "cf.tls_client_auth.cert_issuer_ski",
+        "cf.tls_client_auth.cert_subject_dn",
+        "cf.tls_client_auth.cert_subject_dn_legacy",
+        "cf.tls_client_auth.cert_subject_dn_rfc2253",
+        "cf.tls_client_auth.cert_issuer_dn",
+        "cf.tls_client_auth.cert_issuer_dn_legacy",
+        "cf.tls_client_auth.cert_issuer_dn_rfc2253",
+        "cf.tls_client_auth.cert_not_before",
+        "cf.tls_client_auth.cert_not_after",
+        "cf.tls_client_auth.cert_fingerprint_sha1",
+        "cf.tls_client_auth.cert_fingerprint_sha256",
+        "cf.tls_client_auth.cert_rfc9440",
+        "cf.tls_client_auth.cert_chain_rfc9440",
+        // WAF
+        "cf.waf.score.class",
+        // Misc dynamic
+        "cf.ray_id",
+        // Magic Firewall
+        "ip.proto",
       ),
 
     bytes_field: ($) => choice("cf.random_seed"),
@@ -482,8 +529,15 @@ export default grammar({
         "http.request.headers",
         // HTTP request body fields
         "http.request.body.form",
+        "http.request.body.multipart",
         // HTTP response fields
         "http.response.headers",
+        "raw.http.response.headers",
+        // JWT claims
+        "http.request.jwt.claims.aud",
+        "http.request.jwt.claims.iss",
+        "http.request.jwt.claims.sub",
+        "http.request.jwt.claims.jti",
       ),
 
     array_string_field: ($) =>
@@ -503,9 +557,41 @@ export default grammar({
         // HTTP response fields
         "http.response.headers.names",
         "http.response.headers.values",
+        "raw.http.response.headers.names",
+        "raw.http.response.headers.values",
+        // HTTP request body (multipart)
+        "http.request.body.multipart.names",
+        "http.request.body.multipart.values",
+        "http.request.body.multipart.filenames",
+        "http.request.body.multipart.content_types",
+        "http.request.body.multipart.content_dispositions",
+        "http.request.body.multipart.content_transfer_encodings",
+        // JWT claims
+        "http.request.jwt.claims.aud.names",
+        "http.request.jwt.claims.aud.values",
+        "http.request.jwt.claims.iss.names",
+        "http.request.jwt.claims.iss.values",
+        "http.request.jwt.claims.sub.names",
+        "http.request.jwt.claims.sub.values",
+        "http.request.jwt.claims.jti.names",
+        "http.request.jwt.claims.jti.values",
+        "http.request.jwt.claims.iat.sec.names",
+        "http.request.jwt.claims.nbf.sec.names",
+        // WAF content scan
+        "cf.waf.content_scan.obj_results",
+        "cf.waf.content_scan.obj_types",
+        // LLM (Firewall for AI)
+        "cf.llm.prompt.pii_categories",
+        "cf.llm.prompt.unsafe_topic_categories",
       ),
 
-    array_number_field: ($) => choice("cf.bot_management.detection_ids"),
+    array_number_field: ($) =>
+      choice(
+        "cf.bot_management.detection_ids",
+        "cf.waf.content_scan.obj_sizes",
+        "http.request.jwt.claims.iat.sec.values",
+        "http.request.jwt.claims.nbf.sec.values",
+      ),
 
     bool_field: ($) =>
       choice(
@@ -535,6 +621,29 @@ export default grammar({
         "http.request.headers.truncated",
         // HTTP request body fields
         "http.request.body.truncated",
+        // Bot management
+        "cf.bot_management.signed_agent",
+        // WAF
+        "cf.waf.auth_detected",
+        "cf.waf.content_scan.has_obj",
+        "cf.waf.content_scan.has_malicious_obj",
+        "cf.waf.content_scan.has_failed",
+        "cf.waf.credential_check.password_leaked",
+        "cf.waf.credential_check.username_leaked",
+        "cf.waf.credential_check.username_and_password_leaked",
+        "cf.waf.credential_check.username_password_similar",
+        // LLM (Firewall for AI)
+        "cf.llm.prompt.detected",
+        "cf.llm.prompt.pii_detected",
+        "cf.llm.prompt.unsafe_topic_detected",
+        // API Gateway / schema validation
+        "cf.api_gateway.auth_id_present",
+        "cf.api_gateway.fallthrough_detected",
+        "cf.api_gateway.request_violates_schema",
+        // mTLS client certificate
+        "cf.tls_client_auth.cert_presented",
+        "cf.tls_client_auth.cert_rfc9440_too_large",
+        "cf.tls_client_auth.cert_chain_rfc9440_too_large",
       ),
   },
 });

@@ -3825,6 +3825,46 @@
         {
           "type": "STRING",
           "value": "cf.response.1xxx_code"
+        },
+        {
+          "type": "STRING",
+          "value": "cf.tls_client_hello_length"
+        },
+        {
+          "type": "STRING",
+          "value": "cf.llm.prompt.injection_score"
+        },
+        {
+          "type": "STRING",
+          "value": "cf.llm.prompt.token_count"
+        },
+        {
+          "type": "STRING",
+          "value": "cf.edge.l4.delivery_rate"
+        },
+        {
+          "type": "STRING",
+          "value": "cf.timings.edge_msec"
+        },
+        {
+          "type": "STRING",
+          "value": "cf.timings.origin_ttfb_msec"
+        },
+        {
+          "type": "STRING",
+          "value": "cf.timings.worker_msec"
+        },
+        {
+          "type": "STRING",
+          "value": "cf.timings.client_tcp_rtt_msec"
+        },
+        {
+          "type": "STRING",
+          "value": "cf.timings.client_quic_rtt_msec"
+        },
+        {
+          "type": "STRING",
+          "value": "ip.dst.asnum"
         }
       ]
     },
@@ -4031,6 +4071,118 @@
         {
           "type": "STRING",
           "value": "cf.response.error_type"
+        },
+        {
+          "type": "STRING",
+          "value": "http.response.content_type.media_type"
+        },
+        {
+          "type": "STRING",
+          "value": "raw.http.request.uri.path.extension"
+        },
+        {
+          "type": "STRING",
+          "value": "cf.tls_version"
+        },
+        {
+          "type": "STRING",
+          "value": "cf.tls_cipher"
+        },
+        {
+          "type": "STRING",
+          "value": "cf.tls_client_random"
+        },
+        {
+          "type": "STRING",
+          "value": "cf.tls_ciphers_sha1"
+        },
+        {
+          "type": "STRING",
+          "value": "cf.tls_client_extensions_sha1"
+        },
+        {
+          "type": "STRING",
+          "value": "cf.tls_client_extensions_sha1_le"
+        },
+        {
+          "type": "STRING",
+          "value": "cf.bot_management.ja4"
+        },
+        {
+          "type": "STRING",
+          "value": "cf.tls_client_auth.cert_serial"
+        },
+        {
+          "type": "STRING",
+          "value": "cf.tls_client_auth.cert_issuer_serial"
+        },
+        {
+          "type": "STRING",
+          "value": "cf.tls_client_auth.cert_ski"
+        },
+        {
+          "type": "STRING",
+          "value": "cf.tls_client_auth.cert_issuer_ski"
+        },
+        {
+          "type": "STRING",
+          "value": "cf.tls_client_auth.cert_subject_dn"
+        },
+        {
+          "type": "STRING",
+          "value": "cf.tls_client_auth.cert_subject_dn_legacy"
+        },
+        {
+          "type": "STRING",
+          "value": "cf.tls_client_auth.cert_subject_dn_rfc2253"
+        },
+        {
+          "type": "STRING",
+          "value": "cf.tls_client_auth.cert_issuer_dn"
+        },
+        {
+          "type": "STRING",
+          "value": "cf.tls_client_auth.cert_issuer_dn_legacy"
+        },
+        {
+          "type": "STRING",
+          "value": "cf.tls_client_auth.cert_issuer_dn_rfc2253"
+        },
+        {
+          "type": "STRING",
+          "value": "cf.tls_client_auth.cert_not_before"
+        },
+        {
+          "type": "STRING",
+          "value": "cf.tls_client_auth.cert_not_after"
+        },
+        {
+          "type": "STRING",
+          "value": "cf.tls_client_auth.cert_fingerprint_sha1"
+        },
+        {
+          "type": "STRING",
+          "value": "cf.tls_client_auth.cert_fingerprint_sha256"
+        },
+        {
+          "type": "STRING",
+          "value": "cf.tls_client_auth.cert_rfc9440"
+        },
+        {
+          "type": "STRING",
+          "value": "cf.tls_client_auth.cert_chain_rfc9440"
+        },
+        {
+          "type": "STRING",
+          "value": "cf.waf.score.class"
+        },
+        {
+          "type": "STRING",
+          "value": "cf.ray_id"
+        },
+        {
+          "type": "STRING",
+          "value": "ip.proto"
         }
       ]
     },
@@ -4068,7 +4220,31 @@
         },
         {
           "type": "STRING",
+          "value": "http.request.body.multipart"
+        },
+        {
+          "type": "STRING",
           "value": "http.response.headers"
+        },
+        {
+          "type": "STRING",
+          "value": "raw.http.response.headers"
+        },
+        {
+          "type": "STRING",
+          "value": "http.request.jwt.claims.aud"
+        },
+        {
+          "type": "STRING",
+          "value": "http.request.jwt.claims.iss"
+        },
+        {
+          "type": "STRING",
+          "value": "http.request.jwt.claims.sub"
+        },
+        {
+          "type": "STRING",
+          "value": "http.request.jwt.claims.jti"
         }
       ]
     },
@@ -4118,6 +4294,94 @@
         {
           "type": "STRING",
           "value": "http.response.headers.values"
+        },
+        {
+          "type": "STRING",
+          "value": "raw.http.response.headers.names"
+        },
+        {
+          "type": "STRING",
+          "value": "raw.http.response.headers.values"
+        },
+        {
+          "type": "STRING",
+          "value": "http.request.body.multipart.names"
+        },
+        {
+          "type": "STRING",
+          "value": "http.request.body.multipart.values"
+        },
+        {
+          "type": "STRING",
+          "value": "http.request.body.multipart.filenames"
+        },
+        {
+          "type": "STRING",
+          "value": "http.request.body.multipart.content_types"
+        },
+        {
+          "type": "STRING",
+          "value": "http.request.body.multipart.content_dispositions"
+        },
+        {
+          "type": "STRING",
+          "value": "http.request.body.multipart.content_transfer_encodings"
+        },
+        {
+          "type": "STRING",
+          "value": "http.request.jwt.claims.aud.names"
+        },
+        {
+          "type": "STRING",
+          "value": "http.request.jwt.claims.aud.values"
+        },
+        {
+          "type": "STRING",
+          "value": "http.request.jwt.claims.iss.names"
+        },
+        {
+          "type": "STRING",
+          "value": "http.request.jwt.claims.iss.values"
+        },
+        {
+          "type": "STRING",
+          "value": "http.request.jwt.claims.sub.names"
+        },
+        {
+          "type": "STRING",
+          "value": "http.request.jwt.claims.sub.values"
+        },
+        {
+          "type": "STRING",
+          "value": "http.request.jwt.claims.jti.names"
+        },
+        {
+          "type": "STRING",
+          "value": "http.request.jwt.claims.jti.values"
+        },
+        {
+          "type": "STRING",
+          "value": "http.request.jwt.claims.iat.sec.names"
+        },
+        {
+          "type": "STRING",
+          "value": "http.request.jwt.claims.nbf.sec.names"
+        },
+        {
+          "type": "STRING",
+          "value": "cf.waf.content_scan.obj_results"
+        },
+        {
+          "type": "STRING",
+          "value": "cf.waf.content_scan.obj_types"
+        },
+        {
+          "type": "STRING",
+          "value": "cf.llm.prompt.pii_categories"
+        },
+        {
+          "type": "STRING",
+          "value": "cf.llm.prompt.unsafe_topic_categories"
         }
       ]
     },
@@ -4127,6 +4391,18 @@
         {
           "type": "STRING",
           "value": "cf.bot_management.detection_ids"
+        },
+        {
+          "type": "STRING",
+          "value": "cf.waf.content_scan.obj_sizes"
+        },
+        {
+          "type": "STRING",
+          "value": "http.request.jwt.claims.iat.sec.values"
+        },
+        {
+          "type": "STRING",
+          "value": "http.request.jwt.claims.nbf.sec.values"
         }
       ]
     },
@@ -4216,6 +4492,78 @@
         {
           "type": "STRING",
           "value": "http.request.body.truncated"
+        },
+        {
+          "type": "STRING",
+          "value": "cf.bot_management.signed_agent"
+        },
+        {
+          "type": "STRING",
+          "value": "cf.waf.auth_detected"
+        },
+        {
+          "type": "STRING",
+          "value": "cf.waf.content_scan.has_obj"
+        },
+        {
+          "type": "STRING",
+          "value": "cf.waf.content_scan.has_malicious_obj"
+        },
+        {
+          "type": "STRING",
+          "value": "cf.waf.content_scan.has_failed"
+        },
+        {
+          "type": "STRING",
+          "value": "cf.waf.credential_check.password_leaked"
+        },
+        {
+          "type": "STRING",
+          "value": "cf.waf.credential_check.username_leaked"
+        },
+        {
+          "type": "STRING",
+          "value": "cf.waf.credential_check.username_and_password_leaked"
+        },
+        {
+          "type": "STRING",
+          "value": "cf.waf.credential_check.username_password_similar"
+        },
+        {
+          "type": "STRING",
+          "value": "cf.llm.prompt.detected"
+        },
+        {
+          "type": "STRING",
+          "value": "cf.llm.prompt.pii_detected"
+        },
+        {
+          "type": "STRING",
+          "value": "cf.llm.prompt.unsafe_topic_detected"
+        },
+        {
+          "type": "STRING",
+          "value": "cf.api_gateway.auth_id_present"
+        },
+        {
+          "type": "STRING",
+          "value": "cf.api_gateway.fallthrough_detected"
+        },
+        {
+          "type": "STRING",
+          "value": "cf.api_gateway.request_violates_schema"
+        },
+        {
+          "type": "STRING",
+          "value": "cf.tls_client_auth.cert_presented"
+        },
+        {
+          "type": "STRING",
+          "value": "cf.tls_client_auth.cert_rfc9440_too_large"
+        },
+        {
+          "type": "STRING",
+          "value": "cf.tls_client_auth.cert_chain_rfc9440_too_large"
         }
       ]
     }

@@ -1965,6 +1965,18 @@
     "named": false
   },
   {
+    "type": "cf.api_gateway.auth_id_present",
+    "named": false
+  },
+  {
+    "type": "cf.api_gateway.fallthrough_detected",
+    "named": false
+  },
+  {
+    "type": "cf.api_gateway.request_violates_schema",
+    "named": false
+  },
+  {
     "type": "cf.bot_management.corporate_proxy",
     "named": false
   },
@@ -1977,11 +1989,19 @@
     "named": false
   },
   {
+    "type": "cf.bot_management.ja4",
+    "named": false
+  },
+  {
     "type": "cf.bot_management.js_detection.passed",
     "named": false
   },
   {
     "type": "cf.bot_management.score",
+    "named": false
+  },
+  {
+    "type": "cf.bot_management.signed_agent",
     "named": false
   },
   {
@@ -2005,6 +2025,10 @@
     "named": false
   },
   {
+    "type": "cf.edge.l4.delivery_rate",
+    "named": false
+  },
+  {
     "type": "cf.edge.server_ip",
     "named": false
   },
@@ -2017,7 +2041,39 @@
     "named": false
   },
   {
+    "type": "cf.llm.prompt.detected",
+    "named": false
+  },
+  {
+    "type": "cf.llm.prompt.injection_score",
+    "named": false
+  },
+  {
+    "type": "cf.llm.prompt.pii_categories",
+    "named": false
+  },
+  {
+    "type": "cf.llm.prompt.pii_detected",
+    "named": false
+  },
+  {
+    "type": "cf.llm.prompt.token_count",
+    "named": false
+  },
+  {
+    "type": "cf.llm.prompt.unsafe_topic_categories",
+    "named": false
+  },
+  {
+    "type": "cf.llm.prompt.unsafe_topic_detected",
+    "named": false
+  },
+  {
     "type": "cf.random_seed",
+    "named": false
+  },
+  {
+    "type": "cf.ray_id",
     "named": false
   },
   {
@@ -2033,7 +2089,111 @@
     "named": false
   },
   {
+    "type": "cf.timings.client_quic_rtt_msec",
+    "named": false
+  },
+  {
+    "type": "cf.timings.client_tcp_rtt_msec",
+    "named": false
+  },
+  {
+    "type": "cf.timings.edge_msec",
+    "named": false
+  },
+  {
+    "type": "cf.timings.origin_ttfb_msec",
+    "named": false
+  },
+  {
+    "type": "cf.timings.worker_msec",
+    "named": false
+  },
+  {
+    "type": "cf.tls_cipher",
+    "named": false
+  },
+  {
+    "type": "cf.tls_ciphers_sha1",
+    "named": false
+  },
+  {
+    "type": "cf.tls_client_auth.cert_chain_rfc9440",
+    "named": false
+  },
+  {
+    "type": "cf.tls_client_auth.cert_chain_rfc9440_too_large",
+    "named": false
+  },
+  {
+    "type": "cf.tls_client_auth.cert_fingerprint_sha1",
+    "named": false
+  },
+  {
+    "type": "cf.tls_client_auth.cert_fingerprint_sha256",
+    "named": false
+  },
+  {
+    "type": "cf.tls_client_auth.cert_issuer_dn",
+    "named": false
+  },
+  {
+    "type": "cf.tls_client_auth.cert_issuer_dn_legacy",
+    "named": false
+  },
+  {
+    "type": "cf.tls_client_auth.cert_issuer_dn_rfc2253",
+    "named": false
+  },
+  {
+    "type": "cf.tls_client_auth.cert_issuer_serial",
+    "named": false
+  },
+  {
+    "type": "cf.tls_client_auth.cert_issuer_ski",
+    "named": false
+  },
+  {
+    "type": "cf.tls_client_auth.cert_not_after",
+    "named": false
+  },
+  {
+    "type": "cf.tls_client_auth.cert_not_before",
+    "named": false
+  },
+  {
+    "type": "cf.tls_client_auth.cert_presented",
+    "named": false
+  },
+  {
     "type": "cf.tls_client_auth.cert_revoked",
+    "named": false
+  },
+  {
+    "type": "cf.tls_client_auth.cert_rfc9440",
+    "named": false
+  },
+  {
+    "type": "cf.tls_client_auth.cert_rfc9440_too_large",
+    "named": false
+  },
+  {
+    "type": "cf.tls_client_auth.cert_serial",
+    "named": false
+  },
+  {
+    "type": "cf.tls_client_auth.cert_ski",
+    "named": false
+  },
+  {
+    "type": "cf.tls_client_auth.cert_subject_dn",
+    "named": false
+  },
+  {
+    "type": "cf.tls_client_auth.cert_subject_dn_legacy",
+    "named": false
+  },
+  {
+    "type": "cf.tls_client_auth.cert_subject_dn_rfc2253",
     "named": false
   },
   {
@@ -2041,11 +2201,79 @@
     "named": false
   },
   {
+    "type": "cf.tls_client_extensions_sha1",
+    "named": false
+  },
+  {
+    "type": "cf.tls_client_extensions_sha1_le",
+    "named": false
+  },
+  {
+    "type": "cf.tls_client_hello_length",
+    "named": false
+  },
+  {
+    "type": "cf.tls_client_random",
+    "named": false
+  },
+  {
+    "type": "cf.tls_version",
+    "named": false
+  },
+  {
     "type": "cf.verified_bot_category",
     "named": false
   },
   {
+    "type": "cf.waf.auth_detected",
+    "named": false
+  },
+  {
+    "type": "cf.waf.content_scan.has_failed",
+    "named": false
+  },
+  {
+    "type": "cf.waf.content_scan.has_malicious_obj",
+    "named": false
+  },
+  {
+    "type": "cf.waf.content_scan.has_obj",
+    "named": false
+  },
+  {
+    "type": "cf.waf.content_scan.obj_results",
+    "named": false
+  },
+  {
+    "type": "cf.waf.content_scan.obj_sizes",
+    "named": false
+  },
+  {
+    "type": "cf.waf.content_scan.obj_types",
+    "named": false
+  },
+  {
+    "type": "cf.waf.credential_check.password_leaked",
+    "named": false
+  },
+  {
+    "type": "cf.waf.credential_check.username_and_password_leaked",
+    "named": false
+  },
+  {
+    "type": "cf.waf.credential_check.username_leaked",
+    "named": false
+  },
+  {
+    "type": "cf.waf.credential_check.username_password_similar",
+    "named": false
+  },
+  {
     "type": "cf.waf.score",
+    "named": false
+  },
+  {
+    "type": "cf.waf.score.class",
     "named": false
   },
   {
@@ -2154,6 +2382,34 @@
     "named": false
   },
   {
+    "type": "http.request.body.multipart",
+    "named": false
+  },
+  {
+    "type": "http.request.body.multipart.content_dispositions",
+    "named": false
+  },
+  {
+    "type": "http.request.body.multipart.content_transfer_encodings",
+    "named": false
+  },
+  {
+    "type": "http.request.body.multipart.content_types",
+    "named": false
+  },
+  {
+    "type": "http.request.body.multipart.filenames",
+    "named": false
+  },
+  {
+    "type": "http.request.body.multipart.names",
+    "named": false
+  },
+  {
+    "type": "http.request.body.multipart.values",
+    "named": false
+  },
+  {
     "type": "http.request.body.raw",
     "named": false
   },
@@ -2187,6 +2443,70 @@
   },
   {
     "type": "http.request.headers.values",
+    "named": false
+  },
+  {
+    "type": "http.request.jwt.claims.aud",
+    "named": false
+  },
+  {
+    "type": "http.request.jwt.claims.aud.names",
+    "named": false
+  },
+  {
+    "type": "http.request.jwt.claims.aud.values",
+    "named": false
+  },
+  {
+    "type": "http.request.jwt.claims.iat.sec.names",
+    "named": false
+  },
+  {
+    "type": "http.request.jwt.claims.iat.sec.values",
+    "named": false
+  },
+  {
+    "type": "http.request.jwt.claims.iss",
+    "named": false
+  },
+  {
+    "type": "http.request.jwt.claims.iss.names",
+    "named": false
+  },
+  {
+    "type": "http.request.jwt.claims.iss.values",
+    "named": false
+  },
+  {
+    "type": "http.request.jwt.claims.jti",
+    "named": false
+  },
+  {
+    "type": "http.request.jwt.claims.jti.names",
+    "named": false
+  },
+  {
+    "type": "http.request.jwt.claims.jti.values",
+    "named": false
+  },
+  {
+    "type": "http.request.jwt.claims.nbf.sec.names",
+    "named": false
+  },
+  {
+    "type": "http.request.jwt.claims.nbf.sec.values",
+    "named": false
+  },
+  {
+    "type": "http.request.jwt.claims.sub",
+    "named": false
+  },
+  {
+    "type": "http.request.jwt.claims.sub.names",
+    "named": false
+  },
+  {
+    "type": "http.request.jwt.claims.sub.values",
     "named": false
   },
   {
@@ -2238,6 +2558,10 @@
     "named": false
   },
   {
+    "type": "http.response.content_type.media_type",
+    "named": false
+  },
+  {
     "type": "http.response.headers",
     "named": false
   },
@@ -2282,6 +2606,10 @@
     "named": false
   },
   {
+    "type": "ip.dst.asnum",
+    "named": false
+  },
+  {
     "type": "ip.dst.country",
     "named": false
   },
@@ -2319,6 +2647,10 @@
   },
   {
     "type": "ip.opt.type",
+    "named": false
+  },
+  {
+    "type": "ip.proto",
     "named": false
   },
   {
@@ -2482,7 +2814,23 @@
     "named": false
   },
   {
+    "type": "raw.http.request.uri.path.extension",
+    "named": false
+  },
+  {
     "type": "raw.http.request.uri.query",
+    "named": false
+  },
+  {
+    "type": "raw.http.response.headers",
+    "named": false
+  },
+  {
+    "type": "raw.http.response.headers.names",
+    "named": false
+  },
+  {
+    "type": "raw.http.response.headers.values",
     "named": false
   },
   {

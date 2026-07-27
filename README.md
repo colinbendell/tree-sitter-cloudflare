@@ -50,11 +50,17 @@ literals, CIDR and `start..end` ranges, quoted (with escapes) and raw
 documented function set (including
 `bit_slice`, `is_timed_hmac_valid_v0`, `cidr`/`cidr6`, `substring`,
 `wildcard_replace`, `split`, `join`, `sha256`, base64, and the JWT helpers).
+The field set covers ~200 fields across the HTTP, IP/geo, SSL/TLS, mTLS
+(`cf.tls_client_auth.*`), Bot Management, WAF (score / content-scan /
+credential-check), LLM (`cf.llm.*`), JWT claims, API Gateway, timings, and
+Magic Firewall families.
 
 ### TODO
 
 - Move `matches` to use regex capture rather than string capture.
-- Expand the hard-coded field enum toward the full Cloudflare field set.
+- A few niche field types have no dedicated grammar slot yet: the
+  `Map<Array<Integer>>` JWT time claims (`...iat.sec` / `...nbf.sec` at the map
+  level) and `cf.llm.prompt.custom_topic_categories` (`Map<Integer>`).
 
 ## License
 
